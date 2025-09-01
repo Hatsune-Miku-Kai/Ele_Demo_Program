@@ -1,0 +1,3 @@
+/home/elephant/kevin/MyArmE_LINUX/build/CMakeFiles/MyArmE_LINUX.dir
+/home/elephant/kevin/MyArmE_LINUX/build/CMakeFiles/edit_cache.dir
+/home/elephant/kevin/MyArmE_LINUX/build/CMakeFiles/rebuild_cache.dir

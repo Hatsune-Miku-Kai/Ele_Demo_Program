@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/MyArmE_LINUX.dir/src/Motor_dm.cpp.o CMakeFiles/MyArmE_LINUX.dir/src/main.cpp.o CMakeFiles/MyArmE_LINUX.dir/src/serialib.cpp.o -o MyArmE_LINUX 
