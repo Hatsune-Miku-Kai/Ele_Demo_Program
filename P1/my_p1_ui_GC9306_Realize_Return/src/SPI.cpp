@@ -41,11 +41,12 @@ void SendGcode(const char *cmd)
     digitalWrite(SPI_CS, HIGH); // 结束通信
 }
 
+//目前先返回一个符号位,0x2D表示负号,0x34表示正号,返回的数据前两个字节不要
 void SendArray(uint8_t *txData, uint8_t *rxData)
 {
   digitalWrite(SPI_CS, LOW); // 开始通信
 
-  for (size_t i = 0; i < 13; i++)
+  for (size_t i = 0; i < 20; i++)
   {
     uint8_t received = MySpi.transfer(txData[i]);
     if (rxData != nullptr)
@@ -53,10 +54,10 @@ void SendArray(uint8_t *txData, uint8_t *rxData)
       rxData[i] = received; // 存到接收数组
     }
 
-    Serial.print("Sent: 0x");
-    Serial.print(txData[i], HEX);
-    Serial.print(", Received: 0x");
-    Serial.println(received, HEX);
+    // Serial.print("Sent: 0x");
+    // Serial.print(txData[i], HEX);
+    // Serial.print(", Received: 0x");
+    // Serial.println(received, HEX);
 
     delay(1);
   }

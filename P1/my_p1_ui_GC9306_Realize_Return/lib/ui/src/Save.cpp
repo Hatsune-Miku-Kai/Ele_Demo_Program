@@ -2,8 +2,11 @@
 
 extern UI_Manager ui_manager;
 
+extern const GFXfont FreeSansBold9pt7b;
+
 Save::Save(TFT_eSPI &tft, Button &button) : Screen_Base(tft, button)
 {
+    id = ScreenID::ScreenID_Save;
 }
 
 Save::~Save()
@@ -27,12 +30,13 @@ void Save::Handle_Button()
     {
         switch (selectedIndex)
         {
-            case 0:
+            case 0://RAM
             {
+
                 break;
             }
 
-            case 1:
+            case 1://FLASH
             {
                 break;
             }
@@ -42,9 +46,7 @@ void Save::Handle_Button()
     else if(btn == BTN4)//如果不保存,跳回拖动示教界面
     {
         button.Wait();
-        Drag_Teach* drag_teach = new Drag_Teach(tft, button);
-        this->target_screen = drag_teach;
-        ui_manager.Go_Back();
+        ui_manager.Go_To(Screen_Base::ScreenID_Drag_Teach);
     }
 }
 
@@ -53,7 +55,7 @@ void Save::Draw_UI()
     tft.fillScreen(TFT_BLACK);
 
     // Program 标题 12pt
-    tft.setFreeFont(&FreeSans12pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(15, 30); // 标题起始坐标
     tft.print("Save");
@@ -62,7 +64,7 @@ void Save::Draw_UI()
     tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
 
     // 菜单文字 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
     int y = startY;
     for (int i = 0; i < menuCount; i++)
@@ -73,7 +75,7 @@ void Save::Draw_UI()
     }
 
     // 默认星号 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setCursor(starX, startY);
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
@@ -115,3 +117,11 @@ void Save::Update_Star()
         delay(10);
     }
 }
+
+
+
+void Save::Save_To_RAM()
+{
+    tft.fillRect(0, 0, tft.width(), tft.height(), TFT_BLACK);
+}
+

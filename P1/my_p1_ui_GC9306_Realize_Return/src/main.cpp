@@ -32,15 +32,13 @@ Button button;
 UI_Manager ui_manager;
 
 
-uint8_t Send_Buffer[13] = {0xA5, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00, 0X00,};//Get_Angles_Cmd
-uint8_t Recv_Buffer[13];
-
 void setup() 
 {
     Init_GC9306();//屏幕初始化需要在SPI前面
     SPI_Init();
 
     ui_manager.home_screen = new Home(tft, button);
+    ui_manager.RegisterScreen(ui_manager.home_screen);//将家页面放在列表头
     ui_manager.Change_UI(ui_manager.home_screen, false);
 }
 

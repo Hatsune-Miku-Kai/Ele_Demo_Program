@@ -4,9 +4,12 @@ extern UI_Manager ui_manager;
 
 static uint8_t can_save = 0;
 
+extern const GFXfont FreeSansBold9pt7b;
+
 Record::Record(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
 {
     Serial.println("Record created");
+    id = ScreenID::ScreenID_Record;
 }
 
 Record::~Record()
@@ -33,6 +36,7 @@ void Record::Handle_Button()
     {
         can_save = 0;
         Save *save = new Save(tft, button);
+        ui_manager.RegisterScreen(save);//将页面放入注册列表
         button.Wait();
         ui_manager.Change_UI(save, true);
 
@@ -51,7 +55,7 @@ void Record::Draw_UI()
     tft.fillScreen(TFT_BLACK);
 
     // Program 标题 12pt
-    tft.setFreeFont(&FreeSans12pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(15, 30); // 标题起始坐标
     tft.print("Record");
@@ -59,7 +63,7 @@ void Record::Draw_UI()
     // 顶部横线
     tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
 
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
 
     tft.setCursor(30, 70);

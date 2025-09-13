@@ -1,7 +1,9 @@
 #include "Connection.h"
 
+
 Connection::Connection(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
 {
+    id = ScreenID::ScreenID_Connection;
 }
 
 Connection::~Connection()
@@ -15,7 +17,7 @@ void Connection::Draw_Static()
 
 void Connection::Draw_Update()
 {
-    Update_UI();
+    Update_Star();
 }
 
 void Connection::Handle_Button()
@@ -53,16 +55,16 @@ void Connection::Draw_UI()
     tft.fillScreen(TFT_BLACK);
 
     // Program 标题 12pt
-    tft.setFreeFont(&FreeSans12pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
-    tft.setCursor(15, 30);//标题起始坐标
+    tft.setCursor(15, 40);//标题起始坐标
     tft.print("Connection");
 
     // 顶部横线
-    tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
+    tft.drawLine(0, 50, tft.width(), 50, TFT_WHITE);
 
     // 菜单文字 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
     int y = startY;
     for (int i = 0; i < menuCount; i++)
@@ -73,13 +75,13 @@ void Connection::Draw_UI()
     }
 
     // 默认星号 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setCursor(starX, startY);
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
 
     // 底部分割线
-    tft.drawLine(0, 190, tft.width(), 190, TFT_WHITE);
+    tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
 }
 
 

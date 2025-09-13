@@ -5,7 +5,7 @@
 #include "UI_Manager.h"
 
 
-//子界面
+//关联界面
 #include "Record.h"
 #include "Play.h"
 #include "Program.h"

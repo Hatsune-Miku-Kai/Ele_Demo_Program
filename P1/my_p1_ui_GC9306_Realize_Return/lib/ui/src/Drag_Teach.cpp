@@ -1,9 +1,14 @@
 #include "Drag_Teach.h"
 
+//logo
+
+
+
 extern UI_Manager ui_manager;
 
 Drag_Teach::Drag_Teach(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
 {
+    id = ScreenID::ScreenID_Drag_Teach;
 }
 
 Drag_Teach::~Drag_Teach()
@@ -30,6 +35,7 @@ void Drag_Teach::Handle_Button()
             case 0://Record
             {
                 Record* record = new Record(tft, button);
+                ui_manager.RegisterScreen(record);//将页面放入注册列表
                 button.Wait();
                 ui_manager.Change_UI(record, true);
                 break;
@@ -38,6 +44,7 @@ void Drag_Teach::Handle_Button()
             case 1://Play
             {
                 Play* play = new Play(tft, button);
+                ui_manager.RegisterScreen(play);//将页面放入注册列表
                 button.Wait();
                 ui_manager.Change_UI(play, true);
                 break;
@@ -58,7 +65,7 @@ void Drag_Teach::Draw_UI()
     tft.fillScreen(TFT_BLACK);
 
     // Program 标题 12pt
-    tft.setFreeFont(&FreeSans12pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(15, 30);//标题起始坐标
     tft.print("DragTeach");
@@ -67,7 +74,7 @@ void Drag_Teach::Draw_UI()
     tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
 
     // 菜单文字 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
     int y = startY;
     for (int i = 0; i < menuCount; i++)
@@ -78,10 +85,15 @@ void Drag_Teach::Draw_UI()
     }
 
     // 默认星号 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
-    tft.setCursor(starX, startY);
+    tft.setFreeFont(&FreeSansBold9pt7b);
+    tft.setCursor(starX, startY + 5);
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
+
+    // tft.pushImage(15, 210, 30, 30, program_logo);
+    // tft.pushImage(105, 208, 30, 30, coord_logo);
+    // tft.pushImage(190, 210, 30, 30, io_logo);
+    // tft.pushImage(275, 217, 30, 18, connect_logo);
 
     // 底部分割线
     tft.drawLine(0, 190, tft.width(), 190, TFT_WHITE);
@@ -112,7 +124,7 @@ void Drag_Teach::Update_Star()
         selectedIndex = 0;
 
     // 绘制新的 *
-    tft.setCursor(starX, startY + selectedIndex * lineHeight);
+    tft.setCursor(starX, startY + selectedIndex * lineHeight + 5);
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
 

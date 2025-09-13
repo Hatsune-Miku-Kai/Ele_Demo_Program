@@ -25,9 +25,9 @@ uint8_t Button::Get_Button_Status()
 
     if (voltage4 < 1.0f)
         status = BTN3_4;
-    else if (voltage4 < 1.8f)
+    else if (voltage4 < 2.2f)
         status = BTN4;
-    else if (voltage4 < 2.4f)
+    else if (voltage4 < 2.6f)
         status = BTN3;
 
     // 读取 ADC5
@@ -40,16 +40,15 @@ uint8_t Button::Get_Button_Status()
     adc5 /= 100;
     float voltage5 = adc5 * 3.3f / 4095.0f;
 
-    Serial.println(voltage5);
     if (voltage5 < 1.0f)
         status = BTN1_2;
-    else if (voltage5 < 1.8f)
+    else if (voltage5 < 2.2f)
         status = BTN2;
-    else if (voltage5 < 2.4f)
+    else if (voltage5 < 2.6f)
         status = BTN1;
 
     return status;
-    delay(100);
+    delay(10);
 }
 
 void Button::Wait()

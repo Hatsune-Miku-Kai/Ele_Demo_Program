@@ -5,7 +5,7 @@
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
-//子界面
+//关联界面
 #include "Drag_Teach.h"
 
 class Save : public Screen_Base
@@ -21,6 +21,8 @@ private:
 
     void Draw_UI();
     void Update_Star();
+    void Save_To_RAM();
+    void Save_To_FLASH();
 
     const char *menuItems[2] = {
         "Save to RAM",

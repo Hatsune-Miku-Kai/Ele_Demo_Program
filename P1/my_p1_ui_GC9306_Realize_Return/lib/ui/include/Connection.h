@@ -4,7 +4,7 @@
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
-//子界面
+//关联界面
 #include "WIFI_Information.h"
 
 

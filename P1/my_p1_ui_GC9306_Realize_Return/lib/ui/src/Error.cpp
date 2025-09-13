@@ -2,6 +2,7 @@
 
 extern UI_Manager ui_manager;
 
+
 Error::Error(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
 {
 }

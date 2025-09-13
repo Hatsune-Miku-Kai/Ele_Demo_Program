@@ -2,8 +2,11 @@
 
 extern UI_Manager ui_manager;
 
+extern const GFXfont FreeSansBold9pt7b;
+
 Play::Play(TFT_eSPI &tft, Button &button) : Screen_Base(tft, button)
 {
+    id = ScreenID::ScreenID_Play;
 }
 
 Play::~Play()
@@ -57,7 +60,7 @@ void Play::Draw_UI()
     tft.fillScreen(TFT_BLACK);
 
     // Program 标题 12pt
-    tft.setFreeFont(&FreeSans12pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(15, 30); // 标题起始坐标
     tft.print("Play");
@@ -66,7 +69,7 @@ void Play::Draw_UI()
     tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
 
     // 菜单文字 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
     int y = startY;
     for (int i = 0; i < menuCount; i++)
@@ -77,7 +80,7 @@ void Play::Draw_UI()
     }
 
     // 默认星号 9pt
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setCursor(starX, startY);
     tft.setTextColor(TFT_WHITE);
     tft.print("*");

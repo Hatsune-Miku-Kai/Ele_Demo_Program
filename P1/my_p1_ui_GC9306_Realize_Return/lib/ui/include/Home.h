@@ -3,7 +3,11 @@
 
 #include "Screen_Base.h"
 #include "UI_Manager.h"
+
+//关联界面
 #include "Program.h"
+#include "IO.h"
+#include "Connection_Status.h"
 
 class Home:public Screen_Base
 {
@@ -20,6 +24,8 @@ public:
 
 //内部函数
 private: 
+
+    void Draw_UI();
     void UpdateCoord(float x, float y, float z, float o);
     void UpdateAngle(float j1, float j2, float j3, float j4);
 

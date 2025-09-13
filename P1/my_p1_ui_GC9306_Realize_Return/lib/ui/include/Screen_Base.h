@@ -10,6 +10,26 @@ class Screen_Base
 {
 public:
 
+    enum ScreenID
+    {
+        ScreenID_Home,
+        ScreenID_Program,
+        ScreenID_Drag_Teach,
+        ScreenID_BlocklyRunner,
+        ScreenID_QuickMove,
+        ScreenID_Connection,
+        ScreenID_Firmware,
+        ScreenID_Record,
+        ScreenID_Play,
+        ScreenID_Save,
+        ScreenID_Play_From_RAM_OR_FLASH,
+        ScreenID_Error,
+        ScreenID_WIFI_Information,
+        ScreenID_Save_To_Blockly_Runner,
+        ScreenID_IO,
+        ScreenID_Connection_Status,
+    };
+
     explicit Screen_Base(TFT_eSPI& tft, Button& button);
 
     virtual void Draw_Static() = 0;
@@ -20,12 +40,12 @@ public:
 
     virtual ~Screen_Base();
 
-
-
+    ScreenID id; //每个界面都有一个ID
 
     Screen_Base* prev_screen = nullptr;//上一个界面结点指针
     
-    Screen_Base* target_screen = nullptr;//需要跳转的指定页面结点指针
+//保留,看看以后用不用
+    //Screen_Base* target_screen = nullptr;//需要跳转的指定页面结点指针
 
 protected://UI管理器不可以访问
     TFT_eSPI& tft;  // 所有页面共享一个屏幕

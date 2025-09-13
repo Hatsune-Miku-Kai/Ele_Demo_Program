@@ -2,6 +2,8 @@
 
 extern UI_Manager ui_manager;
 
+extern const GFXfont FreeSansBold9pt7b;
+
 static uint8_t can_save = 0;
 
 Play_From_RAM_OR_FLASH::Play_From_RAM_OR_FLASH(TFT_eSPI &tft, Button &button) : Screen_Base(tft, button)
@@ -38,7 +40,7 @@ void Play_From_RAM_OR_FLASH::Draw_UI()
     tft.fillScreen(TFT_BLACK);
 
     // Program 标题 12pt
-    tft.setFreeFont(&FreeSans12pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(15, 30); // 标题起始坐标
     tft.print("Play");
@@ -46,7 +48,7 @@ void Play_From_RAM_OR_FLASH::Draw_UI()
     // 顶部横线
     tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
 
-    tft.setFreeFont(&FreeSans9pt7b);
+    tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
 
     tft.setCursor(30, 70);
