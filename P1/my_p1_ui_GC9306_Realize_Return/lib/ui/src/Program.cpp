@@ -1,8 +1,14 @@
 #include "Program.h"
 
-extern UI_Manager ui_manager;
 
-extern const GFXfont FreeSansBold9pt7b;
+//logo
+#include "Confirm_logo.h"
+#include "Up_Select_logo.h"
+#include "Down_Select_logo.h"
+#include "Return_logo.h"
+
+
+extern UI_Manager ui_manager;
 
 Program::Program(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
 {
@@ -71,7 +77,7 @@ void Program::Handle_Button()
     else if(btn == BTN4)
     {
         button.Wait();
-        ui_manager.Go_Back();
+        ui_manager.Go_To(ScreenID::ScreenID_Home);
     }
 }
 
@@ -107,8 +113,14 @@ void Program::Draw_UI()
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
 
+    
+    tft.pushImage(15, 205, 24, 30, down_select_logo);
+    tft.pushImage(105, 205, 25, 30, up_select_logo);
+    tft.pushImage(190, 208, 30, 30, confirm_logo);
+    tft.pushImage(278, 210, 32, 28, return_logo);
+
     // 底部分割线
-    tft.drawLine(0, 190, tft.width(), 190, TFT_WHITE);
+    tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
 }
 
 
@@ -118,9 +130,9 @@ void Program::Update_Star()
 
     int8_t dir = 0;
     if (btn == BTN1)
-        dir = 1; // 上
+        dir = 1; // 下
     else if (btn == BTN2)
-        dir = -1;  // 下
+        dir = -1;  // 上
     else
         return;   // 没按键直接返回
 

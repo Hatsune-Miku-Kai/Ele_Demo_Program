@@ -1,10 +1,19 @@
 #include "Record.h"
+#include "SPI.hpp"
+
+//logo
+#include "Pause_logo.h"
+#include "Stop_logo.h"
+#include "Cannot_Save_logo.h"
+#include "Can_Save_logo.h"
+#include "Return_logo.h"
+
 
 extern UI_Manager ui_manager;
 
 static uint8_t can_save = 0;
 
-extern const GFXfont FreeSansBold9pt7b;
+
 
 Record::Record(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
 {
@@ -80,8 +89,13 @@ void Record::Draw_UI()
     tft.setCursor(30, 175);
     tft.print("Recoding...");
 
+    tft.pushImage(15, 205, 30, 30, pause_logo);
+    tft.pushImage(105, 205, 30, 30, stop_logo);
+    tft.pushImage(190, 208, 30, 30, cannot_save_logo);
+    tft.pushImage(278, 210, 32, 28, return_logo);
+
     // 底部分割线
-    tft.drawLine(0, 190, tft.width(), 190, TFT_WHITE);
+    tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
 }
 
 
@@ -95,10 +109,12 @@ void Record::Update_UI()
     // --- Stop 状态 ---
     if (btn == BTN2 && last_btn != BTN2) // 只有边沿触发
     {
+        SendGcode("G153\r\n");//发送绿色灯Gcode指令
         tft.fillRect(30, 155, 200, 30, TFT_BLACK);
         tft.setTextColor(TFT_GREEN, TFT_BLACK);
         tft.setCursor(30, 175);
         tft.print("Stop");
+        tft.pushImage(190, 208, 30, 30, can_save_logo);
         pause_flag = -1;
         can_save = 1;
     }
@@ -108,6 +124,7 @@ void Record::Update_UI()
     {
         if (pause_flag == 0)
         {
+            SendGcode("G152\r\n");//发送蓝色灯Gcode指令
             tft.fillRect(30, 155, 200, 30, TFT_BLACK);
             tft.setTextColor(TFT_BLUE, TFT_BLACK);
             tft.setCursor(30, 175);
@@ -117,6 +134,7 @@ void Record::Update_UI()
         }
         else if (pause_flag == 1)
         {
+            SendGcode("G151\r\n");//发送黄色灯Gcode指令
             tft.fillRect(30, 155, 200, 30, TFT_BLACK);
             tft.setTextColor(TFT_YELLOW, TFT_BLACK);
             tft.setCursor(30, 175);

@@ -1,7 +1,10 @@
 #include "Drag_Teach.h"
 
 //logo
-
+#include "Confirm_logo.h"
+#include "Up_Select_logo.h"
+#include "Down_Select_logo.h"
+#include "Return_logo.h"
 
 
 extern UI_Manager ui_manager;
@@ -85,18 +88,18 @@ void Drag_Teach::Draw_UI()
     }
 
     // 默认星号 9pt
-    tft.setFreeFont(&FreeSansBold9pt7b);
+    tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setCursor(starX, startY + 5);
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
 
-    // tft.pushImage(15, 210, 30, 30, program_logo);
-    // tft.pushImage(105, 208, 30, 30, coord_logo);
-    // tft.pushImage(190, 210, 30, 30, io_logo);
-    // tft.pushImage(275, 217, 30, 18, connect_logo);
+    tft.pushImage(15, 205, 24, 30, down_select_logo);
+    tft.pushImage(105, 205, 25, 30, up_select_logo);
+    tft.pushImage(190, 208, 30, 30, confirm_logo);
+    tft.pushImage(278, 210, 32, 28, return_logo);
 
     // 底部分割线
-    tft.drawLine(0, 190, tft.width(), 190, TFT_WHITE);
+    tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
 }
 
 
@@ -106,9 +109,9 @@ void Drag_Teach::Update_Star()
 
     int8_t dir = 0;
     if (btn == BTN1)
-        dir = -1; // 上
+        dir = 1; // 下
     else if (btn == BTN2)
-        dir = 1;  // 下
+        dir = -1;  // 上
     else
         return;   // 没按键直接返回
 

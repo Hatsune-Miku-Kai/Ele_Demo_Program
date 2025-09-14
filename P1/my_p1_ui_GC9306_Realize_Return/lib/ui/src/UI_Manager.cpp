@@ -141,7 +141,12 @@ bool UI_Manager::Go_To(Screen_Base::ScreenID target_id)
 
     // 绘制目标页面
     if (current_screen != nullptr)
+    {
         current_screen->Draw_Static();
+        return true;
+    }
+
+    return false;//如果所有条件都不满足.返回false
 }
 
 

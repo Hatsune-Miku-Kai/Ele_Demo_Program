@@ -1,8 +1,13 @@
 #include "Play_From_RAM_OR_FLASH.h"
 
-extern UI_Manager ui_manager;
+//logo
+#include "Pause_logo.h"
+#include "Stop_logo.h"
+#include "Cannot_Save_logo.h"
+#include "Can_Save_logo.h"
+#include "Return_logo.h"
 
-extern const GFXfont FreeSansBold9pt7b;
+extern UI_Manager ui_manager;
 
 static uint8_t can_save = 0;
 
@@ -27,7 +32,16 @@ void Play_From_RAM_OR_FLASH::Draw_Update()
 void Play_From_RAM_OR_FLASH::Handle_Button()
 {
     uint8_t btn = button.Get_Button_Status();
-    if(btn == BTN4)
+
+    if(btn == BTN3)
+    {
+        Save_To_Blockly_Runner* save_to_blockly_runner = new Save_To_Blockly_Runner(tft, button);
+        ui_manager.RegisterScreen(save_to_blockly_runner);//将页面放入注册列表
+        button.Wait();
+        ui_manager.Change_UI(save_to_blockly_runner);
+    }
+
+    else if(btn == BTN4)
     {
         button.Wait();
         ui_manager.Go_Back();
@@ -65,8 +79,13 @@ void Play_From_RAM_OR_FLASH::Draw_UI()
     tft.setCursor(30, 175);
     tft.print("Playing...");
 
+    tft.pushImage(15, 205, 30, 30, pause_logo);
+    tft.pushImage(105, 205, 30, 30, stop_logo);
+    tft.pushImage(190, 208, 30, 30, cannot_save_logo);
+    tft.pushImage(278, 210, 32, 28, return_logo);
+
     // 底部分割线
-    tft.drawLine(0, 190, tft.width(), 190, TFT_WHITE);
+    tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
 }
 
 void Play_From_RAM_OR_FLASH::Update_UI()
@@ -83,6 +102,7 @@ void Play_From_RAM_OR_FLASH::Update_UI()
         tft.print("Stop");
         pause_flag = -1;
         can_save = 1;
+        tft.pushImage(190, 208, 30, 30, can_save_logo);
     }
 
     // --- Pause / Resume ---
