@@ -185,18 +185,18 @@ void TIM3_IRQHandler(void) {
         TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
         TIM_Cmd(TIM3, DISABLE); // Í£Ö¹¶¨Ê±Æ÷
 
-        if (pb1_flag && GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_1) == Bit_RESET) {
-            uint8_t buf[2] = {0x01,0x01};
-            CAN_SetMsg(&TxMessage, buf, sizeof(buf), SERVO_ID);
-            CAN_Transmit(CAN1, &TxMessage);
-            CAN_ReadBufferReset();
-        }
-        if (pb11_flag && GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == Bit_RESET) {
-            uint8_t buf[2] = {0x02,0x01};
-            CAN_SetMsg(&TxMessage, buf, sizeof(buf), SERVO_ID);
-            CAN_Transmit(CAN1, &TxMessage);
-            CAN_ReadBufferReset();
-        }
+//        if (pb1_flag && GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_1) == Bit_RESET) {
+//            uint8_t buf[2] = {0x01,0x01};
+//            CAN_SetMsg(&TxMessage, buf, sizeof(buf), SERVO_ID);
+//            CAN_Transmit(CAN1, &TxMessage);
+//            CAN_ReadBufferReset();
+//        }
+//        if (pb11_flag && GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == Bit_RESET) {
+//            uint8_t buf[2] = {0x02,0x01};
+//            CAN_SetMsg(&TxMessage, buf, sizeof(buf), SERVO_ID);
+//            CAN_Transmit(CAN1, &TxMessage);
+//            CAN_ReadBufferReset();
+//        }
 
         pb1_flag = pb11_flag = 0;
     }

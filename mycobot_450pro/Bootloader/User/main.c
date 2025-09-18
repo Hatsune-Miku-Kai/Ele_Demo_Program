@@ -50,6 +50,7 @@ int main(void)
 		}
 		
 
+		
 		if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == Bit_SET)
 			GPIO_SetBits(GPIOB,GPIO_Pin_10);
 //		

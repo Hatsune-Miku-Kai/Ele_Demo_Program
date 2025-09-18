@@ -29,7 +29,7 @@ void ShowAll_RGB(uint8_t G, uint8_t R, uint8_t B);
 void ShowAll_Color(WS2812_Color color);
 
 // 单独控制第 n 颗灯珠
-void ShowOne(uint16_t index, uint8_t G, uint8_t R, uint8_t B);
+void ShowOne(uint16_t index, uint8_t R, uint8_t G, uint8_t B);
 
 // （以前的接口可以保留或删除，看你是否还要用）
 void Black(void);

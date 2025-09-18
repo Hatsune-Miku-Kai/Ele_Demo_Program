@@ -822,7 +822,7 @@ I (.\Library\misc.h)(0x689EB135)
 I (.\Hardware\DEBUG_UART.h)(0x689EB135)
 I (D:\Keil_V5.14\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 F (.\User\stm32f10x_it.h)(0x689EB135)()
-F (.\Hardware\CAN.c)(0x68B53AFE)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Start -I .\User -I .\Library -I .\Hardware -I .\System-ID:\Keil_V5.14\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="541" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\can.o --omf_browse .\objects\can.crf --depend .\objects\can.d)
+F (.\Hardware\CAN.c)(0x68B81576)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Start -I .\User -I .\Library -I .\Hardware -I .\System-ID:\Keil_V5.14\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="541" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\can.o --omf_browse .\objects\can.crf --depend .\objects\can.d)
 I (Hardware\CAN.h)(0x68B012D4)
 I (.\Start\stm32f10x.h)(0x689EB135)
 I (.\Start\core_cm3.h)(0x689EB135)
@@ -998,7 +998,7 @@ I (Hardware\DELAY.h)(0x689EB135)
 I (Hardware\DEBUG_UART.h)(0x689EB135)
 I (D:\Keil_V5.14\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 F (.\Hardware\FLASH.h)(0x689EB135)()
-F (.\Hardware\IAP.c)(0x68B012F0)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Start -I .\User -I .\Library -I .\Hardware -I .\System-ID:\Keil_V5.14\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="541" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\iap.o --omf_browse .\objects\iap.crf --depend .\objects\iap.d)
+F (.\Hardware\IAP.c)(0x68B8FF8A)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Start -I .\User -I .\Library -I .\Hardware -I .\System-ID:\Keil_V5.14\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="541" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\iap.o --omf_browse .\objects\iap.crf --depend .\objects\iap.d)
 I (.\System\SYS.h)(0x689EB135)
 I (.\Start\stm32f10x.h)(0x689EB135)
 I (.\Start\core_cm3.h)(0x689EB135)
@@ -1068,7 +1068,7 @@ I (.\Library\stm32f10x_wwdg.h)(0x689EB135)
 I (.\Library\misc.h)(0x689EB135)
 I (Hardware\CAN.h)(0x68B012D4)
 F (.\Hardware\TIM.h)(0x68A6F594)()
-F (.\Hardware\WS2812.c)(0x68B505AE)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Start -I .\User -I .\Library -I .\Hardware -I .\System-ID:\Keil_V5.14\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="541" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\ws2812.o --omf_browse .\objects\ws2812.crf --depend .\objects\ws2812.d)
+F (.\Hardware\WS2812.c)(0x68B5667C)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Start -I .\User -I .\Library -I .\Hardware -I .\System-ID:\Keil_V5.14\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="541" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\ws2812.o --omf_browse .\objects\ws2812.crf --depend .\objects\ws2812.d)
 I (.\Start\stm32f10x.h)(0x689EB135)
 I (.\Start\core_cm3.h)(0x689EB135)
 I (D:\Keil_V5.14\ARM\ARMCC\include\stdint.h)(0x5D9B3488)

@@ -72,13 +72,13 @@ void ShowAll_Color(WS2812_Color color)
 {
     switch (color)
     {
-        case COLOR_RED:     ShowAll_RGB(0, 127, 0); break;
-        case COLOR_GREEN:   ShowAll_RGB(127, 0, 0); break;
-        case COLOR_BLUE:    ShowAll_RGB(0, 0, 127); break;
-        case COLOR_WHITE:   ShowAll_RGB(127, 127, 127); break;
-        case COLOR_YELLOW:  ShowAll_RGB(127, 127, 0); break;
-        case COLOR_CYAN:    ShowAll_RGB(127, 0, 127); break;
-        case COLOR_MAGENTA: ShowAll_RGB(0, 127, 127); break;
+        case COLOR_RED:     ShowAll_RGB(0, 255, 0); break;
+        case COLOR_GREEN:   ShowAll_RGB(255, 0, 0); break;
+        case COLOR_BLUE:    ShowAll_RGB(0, 0, 255); break;
+        case COLOR_WHITE:   ShowAll_RGB(255, 255, 255); break;
+        case COLOR_YELLOW:  ShowAll_RGB(255, 255, 0); break;
+        case COLOR_CYAN:    ShowAll_RGB(255, 0, 255); break;
+        case COLOR_MAGENTA: ShowAll_RGB(0, 255, 255); break;
         default:            ShowAll_RGB(0, 0, 0); break;  // BLACK
     }
 }

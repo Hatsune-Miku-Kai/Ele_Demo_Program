@@ -554,32 +554,12 @@ void Select_Cmd(uint8_t cmd)
 		
 		case 0x0C:
 		{
-			switch(recv_buffer[2])
-			{
-				case 1:
-				{
-					ShowAll_Color(COLOR_GREEN);
-					break;
-				}
-				
-				case 2:
-				{
-					ShowAll_Color(COLOR_BLUE);
-					break;
-				}
-				
-				case 3:
-				{
-					ShowAll_Color(COLOR_RED);
-					break;
-				}
-				
-				case 4:
-				{
-					ShowAll_Color(COLOR_BLACK);
-					break;
-				}
-			}
+
+			uint8_t G = recv_buffer[3];
+			uint8_t R = recv_buffer[2];
+			uint8_t B = recv_buffer[4];
+			
+			ShowAll_RGB(G,R,B);
 			
 			Default_Return();
 			CAN_ReadBufferReset();

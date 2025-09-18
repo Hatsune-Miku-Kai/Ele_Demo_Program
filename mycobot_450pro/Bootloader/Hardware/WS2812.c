@@ -44,7 +44,7 @@ void Reset(void)
     }
 }
 
-// 发一颗灯的 24bit 数据 (GRB 顺序)
+// 发一颗灯的 24bit 数据 (RGB 顺序)
 void Send24bit(uint8_t G, uint8_t R, uint8_t B)
 {
     for (int i = 7; i >= 0; i--) {
@@ -72,13 +72,13 @@ void ShowAll_Color(WS2812_Color color)
 {
     switch (color)
     {
-        case COLOR_RED:     ShowAll_RGB(0, 127, 0); break;
-        case COLOR_GREEN:   ShowAll_RGB(127, 0, 0); break;
-        case COLOR_BLUE:    ShowAll_RGB(0, 0, 127); break;
-        case COLOR_WHITE:   ShowAll_RGB(127, 127, 127); break;
-        case COLOR_YELLOW:  ShowAll_RGB(127, 127, 0); break;
-        case COLOR_CYAN:    ShowAll_RGB(127, 0, 127); break;
-        case COLOR_MAGENTA: ShowAll_RGB(0, 127, 127); break;
+        case COLOR_RED:     ShowAll_RGB(0, 255, 0); break;
+        case COLOR_GREEN:   ShowAll_RGB(255, 0, 0); break;
+        case COLOR_BLUE:    ShowAll_RGB(0, 0, 255); break;
+        case COLOR_WHITE:   ShowAll_RGB(255, 255, 255); break;
+        case COLOR_YELLOW:  ShowAll_RGB(255, 255, 0); break;
+        case COLOR_CYAN:    ShowAll_RGB(255, 0, 255); break;
+        case COLOR_MAGENTA: ShowAll_RGB(0, 255, 255); break;
         default:            ShowAll_RGB(0, 0, 0); break;  // BLACK
     }
 }
