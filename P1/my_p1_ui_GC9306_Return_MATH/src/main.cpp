@@ -30,6 +30,29 @@
 TFT_eSPI tft = TFT_eSPI();
 Button button;
 UI_Manager ui_manager;
+void Task_UI_Manager(void *pvParameters);
+void Task_Protocal(void *pvParameters);
+
+void Task_UI_Manager(void *pvParameters)
+{
+    while (1)
+    {
+        ui_manager.loop();
+    }
+}
+
+void Task_Protocal(void *pvParameters)
+{
+    while (1)
+    {
+        String c = Serial_ReadLine();
+        if(c != "")
+        {
+            SendGcode(c.c_str());
+            Serial.println(c);
+        }
+    }
+}
 
 
 void setup() 
@@ -40,11 +63,15 @@ void setup()
     ui_manager.home_screen = new Home(tft, button);
     ui_manager.RegisterScreen(ui_manager.home_screen);//将家页面放在列表头
     ui_manager.Change_UI(ui_manager.home_screen, false);
+
+    xTaskCreatePinnedToCore(Task_UI_Manager, "Task_UI_Manager", 4096, NULL, 1, NULL, 1);
+    xTaskCreatePinnedToCore(Task_Protocal, "Task_Protocal", 4096, NULL, 1, NULL, 1);
+
 }
 
 void loop() 
 {
-    ui_manager.loop();
+
 }
 
 

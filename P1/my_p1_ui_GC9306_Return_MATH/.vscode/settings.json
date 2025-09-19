@@ -348,6 +348,7 @@
     "ios": "cpp",
     "locale": "cpp",
     "cinttypes": "cpp",
-    "cstdbool": "cpp"
+    "cstdbool": "cpp",
+    "graphviz-preview.dotPath": "D:\\Graphviz\\bin\\dot.exe"
   }
 }

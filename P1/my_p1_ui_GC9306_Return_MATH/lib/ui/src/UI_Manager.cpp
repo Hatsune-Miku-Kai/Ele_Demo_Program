@@ -156,14 +156,16 @@ bool UI_Manager::Go_To(Screen_Base::ScreenID target_id)
 // loop 刷新界面和处理按键
 void UI_Manager::loop()
 {
+    // String c = Serial_ReadLine();
+    // if(c != "")
+    // {
+    //     SendGcode(c.c_str());
+    //     Serial.println(c);
+    // }
+
     if (current_screen != nullptr) current_screen->Draw_Update();      // 刷新数据
     if (current_screen != nullptr) current_screen->Handle_Button();    // 获取按键信息
-    String c = Serial_ReadLine();
-    if(c != "")
-    {
-        SendGcode(c.c_str());
-        Serial.println(c);
-    }
+
 }
 
 

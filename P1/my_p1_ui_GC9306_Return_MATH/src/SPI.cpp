@@ -43,10 +43,10 @@ void SendGcode(const char *cmd)
   for (size_t i = 0; i < strlen(cmd); i++)
   {
     uint8_t received = MySpi.transfer(cmd[i]);
-    // Serial.print("Sent: 0x");
-    // Serial.print(cmd[i], HEX);
-    // Serial.print(", Received: 0x");
-    // Serial.println(received, HEX);
+    Serial.print("Sent: 0x");
+    Serial.print(cmd[i], HEX);
+    Serial.print(", Received: 0x");
+    Serial.println(received, HEX);
     Recv_Buffer[i] = received;
     delay(1);
 

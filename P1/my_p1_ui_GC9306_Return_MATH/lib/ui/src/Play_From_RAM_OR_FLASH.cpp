@@ -185,6 +185,12 @@ void Play_From_RAM_OR_FLASH::Update_UI()
             tft.setCursor(30, 175);
             last_update = now;
             tft.print("Playing...");
+
+            SendGcode("$X\r\n");//解锁机器
+            SendGcode("G151\r\n");//发送黄色灯Gcode指令
+
+            SendGcode("$X\r\n");  // 解锁机器
+            SendGcode("G12");//复现
         }
     }
 }

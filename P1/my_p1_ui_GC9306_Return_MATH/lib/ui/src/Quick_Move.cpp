@@ -47,10 +47,10 @@ void Quick_Move::Handle_Button()
 
             case 1://点动
             {
-                Jog_Move* jog_move = new Jog_Move(tft, button);
-                ui_manager.RegisterScreen(jog_move);//将页面放入注册列表
+                Jog_Select_Move* jog_select_move = new Jog_Select_Move(tft, button);
+                ui_manager.RegisterScreen(jog_select_move);//将页面放入注册列表
                 button.Wait();
-                ui_manager.Change_UI(jog_move, true);
+                ui_manager.Change_UI(jog_select_move, true);
                 break;
             }
 

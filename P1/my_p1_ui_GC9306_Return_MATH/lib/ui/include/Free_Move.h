@@ -1,7 +1,7 @@
 #ifndef __FREE_MOVE_H__
 #define __FREE_MOVE_H__
 
-
+#include "robotGeometry.hpp"
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
@@ -16,6 +16,8 @@ public:
     void Handle_Button() override;
 
 private:
+    RobotGeometry ultraArmP1;
+
     void Draw_UI();
     void Update_UI();
     void UpdateAngle(float j1, float j2, float j3, float j4);

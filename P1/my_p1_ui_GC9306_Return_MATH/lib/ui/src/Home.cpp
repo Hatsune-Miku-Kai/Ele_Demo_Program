@@ -37,17 +37,23 @@ void Home::Draw_Static()
 
 void Home::Draw_Update()
 {
-    SendArray(Send_Buffer, Recv_Buffer);
+    static long time = millis();
+    if(millis() - time > 150)
+    {
+        time = millis();
+        SendArray(Send_Buffer, Recv_Buffer);
 
-    UpdateAngle(J1+35 , J2, J3, 0);
-    ultraArmP1.rot = (J1+35) / 180.0 * PI;//1.75;-0.175, 0.060, 1.569
-	ultraArmP1.low = J2 / 180.0 * PI;// 0.87;
-	ultraArmP1.high = (J3 + 90) / 180.0 * PI;// 2.44;
-	ultraArmP1.end = 0;
-	ultraArmP1.calculateCoords();
+        UpdateAngle(J1 , J2, J3, 0);
+        ultraArmP1.rot = (J1) / 180.0 * PI;//1.75;-0.175, 0.060, 1.569
+	    ultraArmP1.low = J2 / 180.0 * PI;// 0.87;
+	    ultraArmP1.high = (J3 + 90) / 180.0 * PI;// 2.44;
+	    ultraArmP1.end = 0;
+	    ultraArmP1.calculateCoords();
 
-    UpdateCoord(ultraArmP1.xmm, ultraArmP1.ymm, ultraArmP1.zmm, ultraArmP1.emm);
-    delay(100);
+        UpdateCoord(ultraArmP1.xmm, ultraArmP1.ymm, ultraArmP1.zmm, ultraArmP1.emm);
+    }
+
+
 }
 
 

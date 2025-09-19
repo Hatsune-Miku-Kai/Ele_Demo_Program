@@ -200,7 +200,7 @@ void Record::Update_UI()
 
             SendGcode("$X\r\n");   // 解锁机器
             SendGcode("G151\r\n"); // 发送黄色灯Gcode指令
-            delay(100);
+
             SendGcode("$X\r\n");  // 解锁机器
             SendGcode("G11\r\n"); // 开始拖动示教
         }

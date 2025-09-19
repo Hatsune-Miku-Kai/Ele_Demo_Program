@@ -7,7 +7,7 @@
 
 //关联界面
 #include "Free_Move.h"
-#include "Jog_Move.h"
+#include "Jog_Select_Move.h"
 
 class Quick_Move : public Screen_Base
 {

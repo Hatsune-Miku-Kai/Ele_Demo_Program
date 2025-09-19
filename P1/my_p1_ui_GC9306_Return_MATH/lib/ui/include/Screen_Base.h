@@ -35,7 +35,7 @@ public:
         SCREEN_ID_CALIBRATION_JOINT,
         ScreenID_Quick_Move,
         ScreenID_Free_Move,
-        ScreenID_Jog_Move
+        ScreenID_Jog_Select_Move
     };
 
     explicit Screen_Base(TFT_eSPI& tft, Button& button);
