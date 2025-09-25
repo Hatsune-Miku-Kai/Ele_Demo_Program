@@ -319,7 +319,7 @@ void Select_Cmd(uint8_t cmd)
 	{
 		case 0x06:
 		{
-			uint8_t send_buffer[3]={0x02,cmd,0};
+			uint8_t send_buffer[3]={0x02,cmd,2};
 			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
 			CAN_Transmit(CAN1,&TxMessage);	
 			CAN_ReadBufferReset();

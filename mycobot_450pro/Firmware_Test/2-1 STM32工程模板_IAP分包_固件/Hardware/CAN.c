@@ -319,12 +319,13 @@ void Select_Cmd(uint8_t cmd)
 	{
 		case 0x06:
 		{
-			uint8_t send_buffer[3]={0x02,cmd,0};
+			uint8_t send_buffer[3]={0x02,cmd,1};
 			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
 			CAN_Transmit(CAN1,&TxMessage);	
 			CAN_ReadBufferReset();
 			break;	
 		}
+		
 		
 		
 		case 0X08:
@@ -338,6 +339,7 @@ void Select_Cmd(uint8_t cmd)
 		}
 		
 		
+		
 		case 0x09:
 		{
 			uint8_t send_buffer[3]={0x02,cmd,0x0B};
@@ -346,6 +348,7 @@ void Select_Cmd(uint8_t cmd)
 			CAN_ReadBufferReset();
 			break;			
 		}
+		
 		
 		case 0x61:
 		{
@@ -554,12 +557,12 @@ void Select_Cmd(uint8_t cmd)
 		
 		case 0x0C:
 		{
-
+			
 			uint8_t G = recv_buffer[3];
-			uint8_t R = recv_buffer[5];
+			uint8_t R = recv_buffer[2];
 			uint8_t B = recv_buffer[4];
 			
-			ShowAll_RGB(G,R,B);
+			ShowAll_RGB(G,R,B);//·¢ËÍµÄË³ÐòÊÇGRB
 			
 			Default_Return();
 			CAN_ReadBufferReset();

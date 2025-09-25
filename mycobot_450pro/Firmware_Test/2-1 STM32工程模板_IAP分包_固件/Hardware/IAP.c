@@ -194,7 +194,7 @@ uint32_t Read_Deliver_Addr()
 
 void Into_Bootloader(uint32_t appxaddr)
 {
-
+	Write_Deliver_Addr(BOOTLOADER_MESSAGE);
 	jump2app=(iapfun)*(vu32*)(appxaddr+4);		//用户代码区第二个字为程序开始地址(复位地址)		
 	MSR_MSP(*(vu32*)appxaddr);					//初始化APP堆栈指针(用户代码区的第一个字用于存放栈顶地址)
 	jump2app();		

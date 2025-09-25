@@ -329,8 +329,8 @@
             <uC99>1</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
-            <v6LangP>1</v6LangP>
+            <v6Lang>3</v6Lang>
+            <v6LangP>3</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <v6Lto>0</v6Lto>
@@ -773,11 +773,6 @@
               <FileName>SYS.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\System\SYS.h</FilePath>
-            </File>
-            <File>
-              <FileName>DELAY.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\PRO450\2-1 STM32工程模板\System\DELAY.c</FilePath>
             </File>
           </Files>
         </Group>

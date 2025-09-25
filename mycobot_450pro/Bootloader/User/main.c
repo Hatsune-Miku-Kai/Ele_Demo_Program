@@ -33,7 +33,7 @@ int main(void)
 	
 //	SEGGER_RTT_printf(0,"HELLO WORLD\r\n");
 	
-	ShowAll_Color(COLOR_GREEN);
+	ShowAll_Color(COLOR_YELLOW);
 	
 	if(Read_Deliver_Addr() == 0x12345678)//判断是否有新固件
 		iap_load_app(FLASH_APP1_ADDR);	

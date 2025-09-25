@@ -32,15 +32,15 @@ int main(void)
 	
 
 	//GPIO_Set_Output(GPIOA,GPIO_Pin_0,1);
-	
+	ShowAll_Color(COLOR_GREEN);
     //printf("HELLO IAP\r\n");
 	while(1)
 	{
-		if(Into_APP_Flag)
-		{
-			Into_APP_Flag = 0;
-			Load_App(); 
-		}
+//		if(Into_APP_Flag)
+//		{
+//			Into_APP_Flag = 0;
+//			Load_App(); 
+//		}
 
 		if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == Bit_SET)
 			GPIO_SetBits(GPIOB,GPIO_Pin_10);
