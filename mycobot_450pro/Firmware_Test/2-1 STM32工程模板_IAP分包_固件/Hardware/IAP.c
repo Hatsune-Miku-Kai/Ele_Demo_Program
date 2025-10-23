@@ -53,8 +53,10 @@ void iap_load_app(u32 appxaddr)
 {
 	if(((*(vu32*)appxaddr)&0x2FFE0000)==0x20000000)	//检查栈顶地址是否合法.
 	{  
+		
+		
+		__disable_irq();
 		Write_Deliver_Addr(DELIVER_MESSAGE);
-		SCB->VTOR = appxaddr;
 		
 		
 		__set_PRIMASK(1);
@@ -70,8 +72,8 @@ void iap_load_app(u32 appxaddr)
 		__set_PRIMASK(0);
 		
 		
-		//__disable_irq();
-		//Peripheral_Deinit();
+		RCC_DeInit();
+//		Peripheral_Deinit();
 		
 		jump2app=(iapfun)*(vu32*)(appxaddr+4);		//用户代码区第二个字为程序开始地址(复位地址)		
 		MSR_MSP(*(vu32*)appxaddr);					//初始化APP堆栈指针(用户代码区的第一个字用于存放栈顶地址)

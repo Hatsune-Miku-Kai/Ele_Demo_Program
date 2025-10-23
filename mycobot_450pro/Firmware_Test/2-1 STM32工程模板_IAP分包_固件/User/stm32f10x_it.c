@@ -23,8 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-#include "DEBUG_UART.h"
-
+extern volatile uint32_t no_feed_ms;
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -134,6 +133,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+    no_feed_ms++;
 }
 
 /******************************************************************************/

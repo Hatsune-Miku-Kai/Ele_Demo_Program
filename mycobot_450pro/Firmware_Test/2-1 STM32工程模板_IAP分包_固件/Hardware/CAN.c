@@ -262,8 +262,17 @@ void Handle_Data(CanRxMsg* data)
 	
 	uint8_t list = data->Data[2];//全局静态变量,获取还剩多少条数
 	
-	if(list > list_back)	
+	if(list > list_back && list_back != 0)	
+	{
+		CAN_ReadBufferReset();
+		Default_Error_Return();
+	}
+
+	
+	else if(list > list_back)
+	{
 		list_back = list;
+	}
 	
 	if(list > 1 && list <= 12)
 	{
@@ -319,7 +328,7 @@ void Select_Cmd(uint8_t cmd)
 	{
 		case 0x06:
 		{
-			uint8_t send_buffer[3]={0x02,cmd,1};
+			uint8_t send_buffer[3]={0x02,cmd,3};
 			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
 			CAN_Transmit(CAN1,&TxMessage);	
 			CAN_ReadBufferReset();
@@ -327,28 +336,25 @@ void Select_Cmd(uint8_t cmd)
 		}
 		
 		
-		
-		case 0X08:
-		{
-			Default_Return();
-//			printf("IAP");
-			IAP = 1;
-			TIM_Cmd(TIM2,DISABLE);
-			CAN_ReadBufferReset();
-			break;
-		}
-		
+//		case 0X08:
+//		{
+//			Default_Return();
+////			printf("IAP");
+//			IAP = 1;
+//			TIM_Cmd(TIM2,DISABLE);
+//			CAN_ReadBufferReset();
+//			break;
+//		}
 		
 		
 		case 0x09:
 		{
-			uint8_t send_buffer[3]={0x02,cmd,0x0B};
+			uint8_t send_buffer[3]={0x02,cmd,10};
 			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
 			CAN_Transmit(CAN1,&TxMessage);	
 			CAN_ReadBufferReset();
 			break;			
 		}
-		
 		
 		case 0x61:
 		{
@@ -526,12 +532,12 @@ void Select_Cmd(uint8_t cmd)
 			break;
 		}
 		
-//		case 0x0B:
-//		{
-//			Default_Return();
-//			Into_APP_Flag = 1;
-//			break;
-//		}
+		case 0x0B:
+		{
+			Default_Return();
+			Into_APP_Flag = 1;
+			break;
+		}
 		
 		
 		case 0x0E:
@@ -557,21 +563,25 @@ void Select_Cmd(uint8_t cmd)
 		
 		case 0x0C:
 		{
-			
+
 			uint8_t G = recv_buffer[3];
 			uint8_t R = recv_buffer[2];
 			uint8_t B = recv_buffer[4];
 			
-			ShowAll_RGB(G,R,B);//发送的顺序是GRB
+			ShowAll_RGB(G,R,B);
 			
 			Default_Return();
 			CAN_ReadBufferReset();
-			break;		
+			break;
 		}
 		
+		
 		default:
+		{
 			Default_Error_Return();
 			CAN_ReadBufferReset();
+		}
+
 		
 	}
 }

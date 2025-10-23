@@ -3,6 +3,7 @@
 #include "GPIO.h"
 #include "string.h"
 #include "TIM.h"
+#include "SEGGER_RTT.h"
 
 uint8_t send_buffer_len;
 
@@ -87,7 +88,6 @@ void DMA_Config(void)
     DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 	
     DMA_Init(DMA1_Channel4, &DMA_InitStructure);
-	
     DMA_ITConfig(DMA1_Channel4, DMA_IT_TC, ENABLE);
 	
 	DMA_DeInit(DMA1_Channel5);
@@ -220,6 +220,9 @@ void MODBUS_USART_Init(void)
   */
 void UART1_Send_Data_DMA(uint8_t *buf, uint16_t len)
 {
+	
+	SEGGER_RTT_printf(0,"SendData\r\n");
+	SEGGER_RTT_printf(0,"%d\r\n",len);
     // ½ûÓÃ DMA Í¨µÀ
     DMA_Cmd(DMA1_Channel4, DISABLE);
 	DMA_SetCurrDataCounter(DMA1_Channel4,len);

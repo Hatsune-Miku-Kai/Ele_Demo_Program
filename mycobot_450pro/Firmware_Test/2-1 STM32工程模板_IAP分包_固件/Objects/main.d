@@ -37,4 +37,8 @@
 .\objects\main.o: .\System\SYS.h
 .\objects\main.o: .\Hardware\TIM.h
 .\objects\main.o: .\Hardware\FLASH.h
+.\objects\main.o: .\RTT\Inc\SEGGER_RTT.h
+.\objects\main.o: .\RTT\Inc\SEGGER_RTT_Conf.h
+.\objects\main.o: D:\Keil_V5.14\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\main.o: D:\Keil_V5.14\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\main.o: .\Hardware\WS2812.h

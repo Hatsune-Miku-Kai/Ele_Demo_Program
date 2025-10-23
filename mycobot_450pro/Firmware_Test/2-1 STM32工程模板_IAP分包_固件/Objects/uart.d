@@ -35,3 +35,7 @@
 .\objects\uart.o: Hardware\GPIO.h
 .\objects\uart.o: D:\Keil_V5.14\ARM\ARMCC\Bin\..\include\string.h
 .\objects\uart.o: Hardware\TIM.h
+.\objects\uart.o: .\RTT\Inc\SEGGER_RTT.h
+.\objects\uart.o: .\RTT\Inc\SEGGER_RTT_Conf.h
+.\objects\uart.o: D:\Keil_V5.14\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\uart.o: D:\Keil_V5.14\ARM\ARMCC\Bin\..\include\stdarg.h

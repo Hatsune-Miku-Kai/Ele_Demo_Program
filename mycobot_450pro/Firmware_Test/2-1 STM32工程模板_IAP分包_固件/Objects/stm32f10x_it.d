@@ -29,5 +29,3 @@
 .\objects\stm32f10x_it.o: .\Library\stm32f10x_usart.h
 .\objects\stm32f10x_it.o: .\Library\stm32f10x_wwdg.h
 .\objects\stm32f10x_it.o: .\Library\misc.h
-.\objects\stm32f10x_it.o: .\Hardware\DEBUG_UART.h
-.\objects\stm32f10x_it.o: D:\Keil_V5.14\ARM\ARMCC\Bin\..\include\stdio.h

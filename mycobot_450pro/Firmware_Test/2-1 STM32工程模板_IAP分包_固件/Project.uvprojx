@@ -276,8 +276,8 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8003000</StartAddress>
-                <Size>0xd000</Size>
+                <StartAddress>0x8000000</StartAddress>
+                <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Start;.\User;.\Library;.\Hardware;.\System</IncludePath>
+              <IncludePath>.\Start;.\User;.\Library;.\Hardware;.\System;.\RTT\Src;.\RTT\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -783,6 +783,21 @@
               <FileName>DELAY.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\DELAY.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>RTT</GroupName>
+          <Files>
+            <File>
+              <FileName>SEGGER_RTT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\RTT\Src\SEGGER_RTT.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_RTT_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\RTT\Src\SEGGER_RTT_printf.c</FilePath>
             </File>
           </Files>
         </Group>

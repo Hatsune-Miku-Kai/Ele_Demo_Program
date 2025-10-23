@@ -219,9 +219,6 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 	else if( (RxMessage.Data[0] + 1 == RxMessage.DLC) &&(IAP == 0))
 	{
 		global_cmd = RxMessage.Data[1];
-//		for(int i = 0 ; i < RxMessage.DLC; i++)
-//			printf("%02x ",RxMessage.Data[i]);
-//		printf("\n\r");
 		
 		if(RxMessage.Data[1] != 0XB5)
 		{	
@@ -230,8 +227,9 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 			Select_Cmd(global_cmd);
 		}
 		
-		else			
-			Handle_Data(&RxMessage);
+		else	
+			Default_Error_Return();		
+//			Handle_Data(&RxMessage); Bootloader下夹爪不可控
 	}
 		
 	else
@@ -262,8 +260,17 @@ void Handle_Data(CanRxMsg* data)
 	
 	uint8_t list = data->Data[2];//全局静态变量,获取还剩多少条数
 	
-	if(list > list_back)	
+	if(list > list_back && list_back != 0)	
+	{
+		CAN_ReadBufferReset();
+		Default_Error_Return();
+	}
+
+	
+	else if(list > list_back)
+	{
 		list_back = list;
+	}
 	
 	if(list > 1 && list <= 12)
 	{
@@ -319,7 +326,7 @@ void Select_Cmd(uint8_t cmd)
 	{
 		case 0x06:
 		{
-			uint8_t send_buffer[3]={0x02,cmd,2};
+			uint8_t send_buffer[3]={0x02,cmd,1};
 			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
 			CAN_Transmit(CAN1,&TxMessage);	
 			CAN_ReadBufferReset();
@@ -347,140 +354,111 @@ void Select_Cmd(uint8_t cmd)
 			break;			
 		}
 		
-		case 0x61:
-		{
-			Default_Return();
-			uint16_t res;
-			switch(recv_buffer[2])
-			{
-//				case 3:
-//				res = GPIO_Pin_3;
-//				break;
-//				
-//				case 4:
-//				res = GPIO_Pin_4;
-//				break;
-				
-				case 1://重新给IO排序,实际1对应GPIOA5
-				{	
-					res = GPIO_Pin_5;
-					if (recv_buffer[3])
-					GPIO_WriteBit(GPIOA, res, (BitAction)1); // 输出高电平
-			 
-					else
-					GPIO_WriteBit(GPIOA, res, (BitAction)0); // 输出低电平
-				}
-				break;
-				
-			    case 2://重新给IO排序,实际2对应GPIOA6
-				{	
-					res = GPIO_Pin_6;
-					if (recv_buffer[3])
-					GPIO_WriteBit(GPIOA, res, (BitAction)1); // 输出高电平
-			 
-					else
-					GPIO_WriteBit(GPIOA, res, (BitAction)0); // 输出低电平
-				}
-				break;
-			}
-			//GPIO_Set_Output(GPIOA,recv_buffer[2],recv_buffer[3]);
-			
-			CAN_ReadBufferReset();
-			break;
-		}
-		
-		case 0x62:
-		{
-			uint8_t res;
-			switch(recv_buffer[2])
-			{
-//				case 0:
-//				res = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_0);
-//				break;
-//				
-//				case 1:
-//				res = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_1);
-//				break;
-				
-				case 1://重新给IO排序,实际1对应GPIOA3
-				{
-					res = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_3);
-					uint8_t send_buffer[4]={0x03,cmd,recv_buffer[2],res};
-					CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
-					CAN_Transmit(CAN1,&TxMessage);	
-				}
-				break;
-				
-			    case 2://重新给IO排序,实际2对应GPIOA4
-				{
-					res = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4);
-					uint8_t send_buffer[4]={0x03,cmd,recv_buffer[2],res};
-					CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
-					CAN_Transmit(CAN1,&TxMessage);	
-				}
-				break;
-			}
-
-			CAN_ReadBufferReset();
-			break;
-		}
-		
-		case 0xB3:
-		{
-			uint8_t send_buffer[3]={0x02,cmd,recv_idx};
-			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
-			CAN_Transmit(CAN1,&TxMessage);
-			CAN_ReadBufferReset();
-			break;
-		}
-		
-//		case 0xB4:
+//		case 0x61:
 //		{
-//			printf("Print Recv");
-//			printf("Recv_len : %d",gripper_len);
-//			uint8_t take_lenth = RxMessage.Data[2];//需要获取的缓冲区长度
-//			if(gripper_len != 0 && take_lenth <= gripper_len)
-//			{
-//				UART1_To_CAN1(take_lenth);
-//				CAN_ReadBufferReset();
-//			}
-//			
-//			else //若缓冲区无数据或是获取的数据长度大于缓冲区长度
+//			Default_Return();
+//			uint16_t res;
+//			switch(recv_buffer[2])
 //			{	
-//				uint8_t send_buffer[3]={0x02,0xB4,0};
-//				CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
-//				CAN_Transmit(CAN1,&TxMessage);
-//				CAN_ReadBufferReset();
+//				case 1://重新给IO排序,实际1对应GPIOA5
+//				{	
+//					res = GPIO_Pin_5;
+//					if (recv_buffer[3])
+//					{
+//						GPIO_WriteBit(GPIOA, res, (BitAction)1); // 输出高电平	
+//						CAN_ReadBufferReset();
+//					}
+
+//			 
+//					else
+//					{
+//						GPIO_WriteBit(GPIOA, res, (BitAction)0); // 输出低电平
+//						CAN_ReadBufferReset();
+//					}
+
+//				}
+//				break;
+//				
+//			    case 2://重新给IO排序,实际2对应GPIOA6
+//				{	
+//					res = GPIO_Pin_6;
+//					if (recv_buffer[3])
+//					{
+//						GPIO_WriteBit(GPIOA, res, (BitAction)1); // 输出高电平
+//						uint8_t res = GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_6);
+//						uint8_t send_buffer[4]={0x02,cmd,recv_buffer[2] ,res};
+//						CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//						CAN_Transmit(CAN1,&TxMessage);	
+//						CAN_ReadBufferReset();
+//					}
+//					
+//			 
+//					else
+//					{
+//						GPIO_WriteBit(GPIOA, res, (BitAction)0); // 输出低电平
+//						uint8_t res = GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_6);
+//						uint8_t send_buffer[4]={0x02,cmd, recv_buffer[2],res};
+//						CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//						CAN_Transmit(CAN1,&TxMessage);	
+//						CAN_ReadBufferReset();
+//					}
+
+//				}
+//				break;
 //			}
-//			//USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
+//			//GPIO_Set_Output(GPIOA,recv_buffer[2],recv_buffer[3]);
+//			
+//			CAN_ReadBufferReset();
 //			break;
 //		}
 		
-		case 0xB6:
-		{
-			CAN_ReadBufferReset();
-			break;
-		}
-		
-		case 0xB7:
-		{
-			uint8_t send_buffer[3]= {0x02,cmd,recv_buffer[0]};
-			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
-			CAN_Transmit(CAN1,&TxMessage);
-			CAN_ReadBufferReset();
-			break;
-		}
+//		case 0x62:
+//		{
+//			uint8_t res;
+//			switch(recv_buffer[2])
+//			{			
+//				case 1://重新给IO排序,实际1对应GPIOA3
+//				{
+//					res = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_3);
+//					uint8_t send_buffer[4]={0x03,cmd,recv_buffer[2],res};
+//					CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//					CAN_Transmit(CAN1,&TxMessage);	
+//				}
+//				break;
+//				
+//			    case 2://重新给IO排序,实际2对应GPIOA4
+//				{
+//					res = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4);
+//					uint8_t send_buffer[4]={0x03,cmd,recv_buffer[2],res};
+//					CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//					CAN_Transmit(CAN1,&TxMessage);	
+//				}
+//				break;
+//			}
+
+//			CAN_ReadBufferReset();
+//			break;
+//		}
 		
 
 		
-		case 0x0A:
-		{
-			Default_Return();
-			over_time = RxMessage.Data[2] << 8 |RxMessage.Data[3];
-			//printf("overtime set to %d ms",over_time);
-			CAN_ReadBufferReset();
-			break;
-		}
+//		case 0xB6:
+//		{
+//			CAN_ReadBufferReset();
+//			break;
+//		}
+		
+//
+		
+
+//		case 0x0A:
+//		{
+//			Default_Return();
+//			over_time = RxMessage.Data[2] << 8 |RxMessage.Data[3];
+//			//printf("overtime set to %d ms",over_time);
+//			CAN_ReadBufferReset();
+//			break;
+//		}
 		
 		
 		case 0x71:
@@ -514,21 +492,21 @@ void Select_Cmd(uint8_t cmd)
 			
 		}
 		
-		case 0x73:
-		{
-			Default_Return();
-			int32_t Baud_Rate = RxMessage.Data[2] << 24 | RxMessage.Data[3] << 16 | RxMessage.Data[4] << 8 | RxMessage.Data[5];
-			MODBUS_USART_ModeConfig(Baud_Rate);
-			CAN_ReadBufferReset();
-			break;
-		}
-		
-//		case 0x0B:
+//		case 0x73://设置波特率
 //		{
 //			Default_Return();
-//			Into_APP_Flag = 1;
+//			int32_t Baud_Rate = RxMessage.Data[2] << 24 | RxMessage.Data[3] << 16 | RxMessage.Data[4] << 8 | RxMessage.Data[5];
+//			MODBUS_USART_ModeConfig(Baud_Rate);
+//			CAN_ReadBufferReset();
 //			break;
 //		}
+		
+		case 0x0B:
+		{
+			Default_Return();
+			Into_APP_Flag = 1;
+			break;
+		}
 		
 		
 //		case 0x0E:
@@ -538,19 +516,6 @@ void Select_Cmd(uint8_t cmd)
 //			break;
 //		}
 		
-//		case 0x74:
-//		{
-//			GPIO_ResetBits(GPIOA, GPIO_Pin_8);//关闭485通信
-//			CAN_ReadBufferReset();
-//			break;
-//		}
-//		
-//		case 0x75:
-//		{
-//			GPIO_ResetBits(GPIOA, GPIO_Pin_8);//开启485通信
-//			CAN_ReadBufferReset();
-//			break;
-//		}
 		
 		case 0x0C:
 		{
@@ -592,3 +557,64 @@ void Default_Error_Return()
 	CAN_Transmit(CAN1,&TxMessage);	
 }
 
+
+
+
+//		case 0xB7:
+//		{
+//			uint8_t send_buffer[3]= {0x02,cmd,recv_buffer[0]};
+//			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//			CAN_Transmit(CAN1,&TxMessage);
+//			CAN_ReadBufferReset();
+//			break;
+//		}
+
+
+//		case 0x74:
+//		{
+//			GPIO_ResetBits(GPIOA, GPIO_Pin_8);//关闭485通信
+//			CAN_ReadBufferReset();
+//			break;
+//		}
+//		
+//		case 0x75:
+//		{
+//			GPIO_ResetBits(GPIOA, GPIO_Pin_8);//开启485通信
+//			CAN_ReadBufferReset();
+//			break;
+//		}
+
+
+
+
+//		case 0xB3:
+//		{
+//			uint8_t send_buffer[3]={0x02,cmd,recv_idx};
+//			CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//			CAN_Transmit(CAN1,&TxMessage);
+//			CAN_ReadBufferReset();
+//			break;
+//		}
+		
+		//暂时不需要
+//		case 0xB4:
+//		{
+//			printf("Print Recv");
+//			printf("Recv_len : %d",gripper_len);
+//			uint8_t take_lenth = RxMessage.Data[2];//需要获取的缓冲区长度
+//			if(gripper_len != 0 && take_lenth <= gripper_len)
+//			{
+//				UART1_To_CAN1(take_lenth);
+//				CAN_ReadBufferReset();
+//			}
+//			
+//			else //若缓冲区无数据或是获取的数据长度大于缓冲区长度
+//			{	
+//				uint8_t send_buffer[3]={0x02,0xB4,0};
+//				CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
+//				CAN_Transmit(CAN1,&TxMessage);
+//				CAN_ReadBufferReset();
+//			}
+//			//USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
+//			break;
+//		}

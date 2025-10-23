@@ -53,9 +53,9 @@ void iap_load_app(u32 appxaddr)
 {
 	if(((*(vu32*)appxaddr)&0x2FFE0000)==0x20000000)	//检查栈顶地址是否合法.
 	{  
-		Write_Deliver_Addr(DELIVER_MESSAGE);
-		SCB->VTOR = appxaddr;
 		
+		
+		__disable_irq();
 		
 		__set_PRIMASK(1);
 		SysTick->CTRL = 0;
@@ -70,8 +70,8 @@ void iap_load_app(u32 appxaddr)
 		__set_PRIMASK(0);
 		
 		
-		//__disable_irq();
-		//Peripheral_Deinit();
+		RCC_DeInit();
+//		Peripheral_Deinit();
 		
 		jump2app=(iapfun)*(vu32*)(appxaddr+4);		//用户代码区第二个字为程序开始地址(复位地址)		
 		MSR_MSP(*(vu32*)appxaddr);					//初始化APP堆栈指针(用户代码区的第一个字用于存放栈顶地址)
@@ -114,7 +114,7 @@ void USER_IAP(void)
 		{
 				Flash_FirmWare();
 				uint8_t send_buffer[8]={0x07,0x08,1,1,1,1,1,1};//表示可以烧录完成了,可以继续发送数据包
-			//printf("Have Rec one package\n\r");
+				//printf("Have Rec one package\n\r");
 				CAN_SetMsg(&TxMessage,send_buffer,sizeof(send_buffer),SERVO_ID);
 				CAN_Transmit(CAN1,&TxMessage);
 				//CAN_ReadBufferReset();
@@ -194,7 +194,7 @@ uint32_t Read_Deliver_Addr()
 
 void Into_Bootloader(uint32_t appxaddr)
 {
-
+	
 	jump2app=(iapfun)*(vu32*)(appxaddr+4);		//用户代码区第二个字为程序开始地址(复位地址)		
 	MSR_MSP(*(vu32*)appxaddr);					//初始化APP堆栈指针(用户代码区的第一个字用于存放栈顶地址)
 	jump2app();		
