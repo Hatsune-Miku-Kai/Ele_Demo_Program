@@ -48,7 +48,6 @@ uint8_t Button::Get_Button_Status()
         status = BTN1;
 
     return status;
-    delay(10);
 }
 
 void Button::Wait()

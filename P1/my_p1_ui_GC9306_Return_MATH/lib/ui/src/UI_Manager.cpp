@@ -162,7 +162,6 @@ void UI_Manager::loop()
     //     SendGcode(c.c_str());
     //     Serial.println(c);
     // }
-
     if (current_screen != nullptr) current_screen->Draw_Update();      // 刷新数据
     if (current_screen != nullptr) current_screen->Handle_Button();    // 获取按键信息
 

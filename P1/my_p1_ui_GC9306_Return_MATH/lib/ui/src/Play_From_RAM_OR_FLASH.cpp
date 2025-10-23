@@ -22,8 +22,8 @@ Play_From_RAM_OR_FLASH::~Play_From_RAM_OR_FLASH()
 void Play_From_RAM_OR_FLASH::Draw_Static()
 {
     Draw_UI();
-    SendGcode("$X\r\n");  // 解锁机器
-    SendGcode("G12\r\n"); // 拖动示教复现
+    // SendGcode("$X\r\n");  // 解锁机器
+    // SendGcode("G12\r\n"); // 拖动示教复现
 }
 
 void Play_From_RAM_OR_FLASH::Draw_Update()
@@ -186,11 +186,11 @@ void Play_From_RAM_OR_FLASH::Update_UI()
             last_update = now;
             tft.print("Playing...");
 
-            SendGcode("$X\r\n");//解锁机器
-            SendGcode("G151\r\n");//发送黄色灯Gcode指令
+            // SendGcode("$X\r\n");//解锁机器
+            // SendGcode("G151\r\n");//发送黄色灯Gcode指令
 
-            SendGcode("$X\r\n");  // 解锁机器
-            SendGcode("G12");//复现
+            // SendGcode("$X\r\n");  // 解锁机器
+            // SendGcode("G12");//复现
         }
     }
 }

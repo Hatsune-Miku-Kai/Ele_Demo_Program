@@ -24,10 +24,10 @@ using namespace std;
 
 
 
-using Angles = array<float,6>;
-using Speeds = array<int, 6>;
-using Error = array<uint8_t, 6>;
-using PID = array<float,6>;
+using Angles = array<float,7>;
+using Speeds = array<int, 7>;
+using Error = array<uint8_t, 7>;
+using PID = array<float,7>;
 
 
 

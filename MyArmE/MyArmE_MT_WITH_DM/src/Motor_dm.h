@@ -6,10 +6,11 @@
 
 #include "driver/can.h"
 
-using Angles = std::array<float,6>;
-using Errors = std::array<uint8_t,6>;
-using PID = std::array<float,6>;
-using Rads = std::array<float,6>;
+using Angles = std::array<float,7>;
+using Errors = std::array<uint8_t,7>;
+using PID = std::array<float,7>;
+using Rads = std::array<float,7>;
+using Temperature = std::array<float,7>;
 
 #define J1_MAX 165
 #define J1_MIN -165
@@ -63,7 +64,11 @@ public:
 
     void Set_Angles(uint8_t *id, uint8_t len, float *angles, float speed);
 
+    void Set_Angle_Single(uint8_t id, float angle, float speed);
+
     Angles Get_Angles(uint8_t *id, uint8_t len);
+
+    int Get_Angle_Single(uint8_t id);
 
     Rads Get_Rads(uint8_t *id, uint8_t len);
 
@@ -81,6 +86,9 @@ public:
 
     void Save_PID(uint8_t *id, uint8_t len);
 
+    Temperature Get_Temperature(uint8_t *id, uint8_t len);
+
+    Temperature Get_MOS_Temperature(uint8_t *id, uint8_t len);
     //封装好的接口结束
 };
 

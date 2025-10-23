@@ -349,6 +349,9 @@
     "locale": "cpp",
     "cinttypes": "cpp",
     "cstdbool": "cpp",
-    "graphviz-preview.dotPath": "D:\\Graphviz\\bin\\dot.exe"
+    "graphviz-preview.dotPath": "D:\\Graphviz\\bin\\dot.exe",
+    "chrono": "cpp",
+    "ratio": "cpp",
+    "thread": "cpp"
   }
 }

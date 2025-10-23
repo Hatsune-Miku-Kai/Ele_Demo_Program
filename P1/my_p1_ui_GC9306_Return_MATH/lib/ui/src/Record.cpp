@@ -102,8 +102,8 @@ void Record::Update_UI()
         // --- Stop 状态 ---
         if (btn == BTN2 && last_btn != BTN2) // 只有边沿触发
         {
-            SendGcode("$X\r\n");   // 解锁机器
-            SendGcode("G153\r\n"); // 发送绿色灯Gcode指令
+            // SendGcode("$X\r\n");   // 解锁机器
+            // SendGcode("G153\r\n"); // 发送绿色灯Gcode指令
 
             tft.fillRect(30, 155, 200, 30, TFT_BLACK);
             tft.setTextColor(TFT_GREEN);
@@ -119,8 +119,8 @@ void Record::Update_UI()
         {
             if (pause_flag == 0)
             {
-                SendGcode("$X\r\n");   // 解锁机器
-                SendGcode("G152\r\n"); // 发送蓝色灯Gcode指令
+                // SendGcode("$X\r\n");   // 解锁机器
+                // SendGcode("G152\r\n"); // 发送蓝色灯Gcode指令
 
                 tft.fillRect(15, 205, 30, 32, TFT_BLACK);
                 tft.pushImage(15, 205, 30, 30, start_logo);
@@ -134,8 +134,8 @@ void Record::Update_UI()
             }
             else if (pause_flag == 1)
             {
-                SendGcode("$X\r\n");   // 解锁机器
-                SendGcode("G151\r\n"); // 发送黄色灯Gcode指令
+                // SendGcode("$X\r\n");   // 解锁机器
+                // SendGcode("G151\r\n"); // 发送黄色灯Gcode指令
 
                 tft.fillRect(15, 205, 30, 32, TFT_BLACK);
                 tft.pushImage(15, 205, 30, 32, pause_logo);
@@ -198,11 +198,11 @@ void Record::Update_UI()
             last_update = now;
             tft.print("Recording...");
 
-            SendGcode("$X\r\n");   // 解锁机器
-            SendGcode("G151\r\n"); // 发送黄色灯Gcode指令
+            // SendGcode("$X\r\n");   // 解锁机器
+            // SendGcode("G151\r\n"); // 发送黄色灯Gcode指令
 
-            SendGcode("$X\r\n");  // 解锁机器
-            SendGcode("G11\r\n"); // 开始拖动示教
+            // SendGcode("$X\r\n");  // 解锁机器
+            // SendGcode("G11\r\n"); // 开始拖动示教
         }
     }
 }

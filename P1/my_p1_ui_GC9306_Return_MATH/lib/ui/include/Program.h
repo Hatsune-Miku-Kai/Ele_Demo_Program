@@ -1,18 +1,16 @@
-#ifndef PROGRAM_H
-#define PROGRAM_H
+#ifndef __PROGRAM_H__
+#define __PROGRAM_H__
 
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
-//关联界面
+// 关联界面
 #include "Drag_Teach.h"
 // #include "Blockly_Runner.h"
 #include "Quick_Move.h"
 #include "Connection.h"
-// #include "Firmware.h"
+#include "Firmware.h"
 #include "Calibration.h"
-
-
 
 class Program : public Screen_Base
 {
@@ -25,11 +23,13 @@ public:
     void Draw_Update() override;
     void Handle_Button() override;
 
-
 private:
-
     void Draw_UI();
     void Update_UI();
+    void UltraArm_P1_UI();
+    void MyCobot_Pro_450_UI();
+
+#ifdef UltraArm_P1
 
     const char *menuItems[6] = {
         "DragTeach",
@@ -39,6 +39,35 @@ private:
         "Firmware",
         "Calibration"};
     const int menuCount = 6;
+
+    std::map<std::string, std::pair<int, int>> starPos = {
+        {"DragTeach",       {10, 75}},
+        {"BlocklyRunner",   {10, 100}},
+        {"QuickMove",       {10, 125}},
+        {"Connection",      {10, 150}},
+        {"Firmware",        {10, 175}},
+        {"Calibration",     {10, 200}}};
+
+#endif
+
+#ifdef MyCobot_Pro_450
+
+    const char *menuItems[5] = {
+        "DragTeach",
+        "BlocklyRunner",
+        "QuickMove",
+        "Firmware",
+        "Calibration"};
+    const int menuCount = 5;
+
+    std::map<std::string, std::pair<int, int>> starPos = {
+        {"DragTeach",       {10, 75}},
+        {"BlocklyRunner",   {10, 100}},
+        {"QuickMove",       {10, 125}},
+        {"Firmware",        {10, 150}},
+        {"Calibration",     {10, 175}}};
+
+#endif
 
     int selectedIndex = 0; // 当前选中
     // int lastIndex = 0;     // 上一次选中

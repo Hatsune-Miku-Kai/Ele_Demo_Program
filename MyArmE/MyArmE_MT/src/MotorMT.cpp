@@ -265,7 +265,7 @@ Error MotorMT::Get_Motor_Errors(uint8_t *ID, uint8_t id_len)
     {
         CAN.ReadMsg(send_buffer, 8, ID[i] + SINGLE_MOTOR_CMD, Read_Buffer, false);
         error[i] = Read_Buffer.second[7] << 8 | Read_Buffer.second[6];
-        //printf("%x\n\r",error[i]);
+        // printf("%x\n\r",error[i]);
     }
     
     return error;
@@ -537,3 +537,6 @@ PID MotorMT:: Get_Motor_PID(uint8_t *ID, uint8_t id_len, uint8_t mode)
     }
     return pid;
 }
+
+
+

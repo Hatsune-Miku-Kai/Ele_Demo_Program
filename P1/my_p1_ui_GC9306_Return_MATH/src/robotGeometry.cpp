@@ -13,11 +13,11 @@ RobotGeometry::RobotGeometry()
 
 /*****************************************************************************************
 *
-*           ���˶�ѧ:
+*           ??????:
 *                                 input:angles (J1, J2, J3)
 *                                 output:coords(x, y, z)
 *
-*           ����1*3�ĽǶȣ����1*3������
+*           ????1*3????????1*3??????
 *
 ******************************************************************************************/
 void RobotGeometry::calculateCoords()
@@ -49,9 +49,9 @@ void RobotGeometry::calculateCoords()
 
 /*****************************************************************************************
 *
-*           ���˶�ѧ:
-*                                 input: (ymm, xmm, zmm)�ѿ�������
-*                                 output: (rot, low, high)1~3�ؽڽǶ�
+*           ??????:
+*                                 input: (ymm, xmm, zmm)?????????
+*                                 output: (rot, low, high)1~3?????
 *
 *
 *
@@ -68,9 +68,9 @@ void RobotGeometry::calculateGrad() {
             rot = -(PI + asin(ymm / hypot(ymm, xmm)));
         }
     }
-    float xmm_offset = xmm - base_offset * cos(rot); //��ȥBase����offset
-    float ymm_offset = ymm - base_offset * sin(rot); //��ȥBase����offset
-    float zmm_offset = zmm + end_effector_offsetz; //��ȥBase����offset
+    float xmm_offset = xmm - base_offset * cos(rot); //???Base????offset
+    float ymm_offset = ymm - base_offset * sin(rot); //???Base????offset
+    float zmm_offset = zmm + end_effector_offsetz; //???Base????offset
 
     float rrot_ee = hypot(ymm_offset, xmm_offset);
     float rrot = rrot_ee - end_effector_offsetx; //radius from Top View

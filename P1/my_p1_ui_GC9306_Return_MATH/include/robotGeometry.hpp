@@ -3,8 +3,10 @@
 #define ROBOTGEOMETRY_HPP_
 #include <math.h>
 #include "config.hpp"
-#define PI 3.1415926535
 
+#ifndef PI
+#define PI 3.1415926535
+#endif
 
 
 class RobotGeometry

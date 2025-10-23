@@ -1,16 +1,14 @@
 #include "Program.h"
 
-
-//logo
+// logo
 #include "Confirm_logo.h"
 #include "Up_Select_logo.h"
 #include "Down_Select_logo.h"
 #include "Return_logo.h"
 
-
 extern UI_Manager ui_manager;
 
-Program::Program(TFT_eSPI& tft, Button& button) : Screen_Base(tft, button)
+Program::Program(TFT_eSPI &tft, Button &button) : Screen_Base(tft, button)
 {
     Serial.println("Program created");
     id = ScreenID::ScreenID_Program;
@@ -21,84 +19,26 @@ Program::~Program()
     Serial.println("Program destroyed");
 }
 
-
 void Program::Draw_Static()
 {
     Draw_UI();
 }
-
 
 void Program::Draw_Update()
 {
     Update_UI();
 }
 
-
-
 void Program::Handle_Button()
 {
-    uint8_t btn = button.Get_Button_Status();
+#ifdef UltraArm_P1
+    UltraArm_P1_UI();
+#endif
 
-    if(btn == BTN3)
-    {
-        switch(selectedIndex)
-        {
-            case 0://DragTeach
-            {
-                Drag_Teach* drag_teach = new Drag_Teach(tft, button);
-                ui_manager.RegisterScreen(drag_teach);//将页面放入注册列表
-                button.Wait();
-                ui_manager.Change_UI(drag_teach, true);
-                break;
-            }
-
-            case 1://Blockly_Runner
-            {
-                break;
-            }
-
-            case 2://Quick_Move
-            {
-                Quick_Move* quick_move = new Quick_Move(tft, button);
-                ui_manager.RegisterScreen(quick_move);//将页面放入注册列表
-                button.Wait();
-                ui_manager.Change_UI(quick_move, true);
-                break;
-            }
-
-            case 3://Connection
-            {
-                Connection* connection = new Connection(tft, button);
-                ui_manager.RegisterScreen(connection);//将页面放入注册列表
-                button.Wait();
-                ui_manager.Change_UI(connection, true);
-                break;
-            }
-
-            case 4://FirmWare
-            {
-                break;
-            }
-
-            case 5://Calibration
-            {
-                Calibration* calibration = new Calibration(tft, button);
-                ui_manager.RegisterScreen(calibration);//将页面放入注册列表
-                button.Wait();
-                ui_manager.Change_UI(calibration, true);
-                break;
-            }
-        }
-    }
-
-    else if(btn == BTN4)
-    {
-        button.Wait();
-        ui_manager.Go_To(ScreenID::ScreenID_Home);
-    }
+#ifdef MyCobot_Pro_450
+    MyCobot_Pro_450_UI();
+#endif
 }
-
-
 
 void Program::Draw_UI()
 {
@@ -109,7 +49,7 @@ void Program::Draw_UI()
     // Program 标题 12pt
     tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
-    tft.setCursor(15, 30);//标题起始坐标
+    tft.setCursor(15, 30); // 标题起始坐标
     tft.print("Program");
 
     // 顶部横线
@@ -132,7 +72,6 @@ void Program::Draw_UI()
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
 
-    
     tft.pushImage(15, 205, 24, 30, down_select_logo);
     tft.pushImage(105, 205, 25, 30, up_select_logo);
     tft.pushImage(190, 208, 30, 30, confirm_logo);
@@ -142,7 +81,6 @@ void Program::Draw_UI()
     tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
 }
 
-
 void Program::Update_UI()
 {
     uint8_t btn = button.Get_Button_Status(); // 读取当前按键
@@ -151,9 +89,9 @@ void Program::Update_UI()
     if (btn == BTN1)
         dir = 1; // 下
     else if (btn == BTN2)
-        dir = -1;  // 上
+        dir = -1; // 上
     else
-        return;   // 没按键直接返回
+        return; // 没按键直接返回
 
     // 擦除旧的 *
     tft.fillRect(0, startY + (selectedIndex - 1) * lineHeight, textX, lineHeight, TFT_BLACK);
@@ -172,4 +110,129 @@ void Program::Update_UI()
     tft.print("*");
 
     button.Wait();
+}
+
+
+void Program::UltraArm_P1_UI()
+{
+    uint8_t btn = button.Get_Button_Status();
+    if (btn == BTN3)
+    {
+        switch (selectedIndex)
+        {
+        case 0: // DragTeach
+        {
+            Drag_Teach *drag_teach = new Drag_Teach(tft, button);
+            ui_manager.RegisterScreen(drag_teach); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(drag_teach, true);
+            break;
+        }
+
+        case 1: // Blockly_Runner
+        {
+            break;
+        }
+
+        case 2: // Quick_Move
+        {
+            Quick_Move *quick_move = new Quick_Move(tft, button);
+            ui_manager.RegisterScreen(quick_move); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(quick_move, true);
+            break;
+        }
+
+        case 3: // Connection
+        {
+            Connection *connection = new Connection(tft, button);
+            ui_manager.RegisterScreen(connection); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(connection, true);
+            break;
+        }
+
+        case 4: // Firmware
+        {
+            Firmware *firmware = new Firmware(tft, button);
+            ui_manager.RegisterScreen(firmware); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(firmware, true);
+            break;
+        }
+
+        case 5: // Calibration
+        {
+            Calibration *calibration = new Calibration(tft, button);
+            ui_manager.RegisterScreen(calibration); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(calibration, true);
+            break;
+        }
+        }
+    }
+
+    else if (btn == BTN4)
+    {
+        button.Wait();
+        ui_manager.Go_To(ScreenID::ScreenID_Home);
+    }
+}
+
+
+void Program::MyCobot_Pro_450_UI()
+{
+    uint8_t btn = button.Get_Button_Status();
+    if (btn == BTN3)
+    {
+        switch (selectedIndex)
+        {
+        case 0: // DragTeach
+        {
+            Drag_Teach *drag_teach = new Drag_Teach(tft, button);
+            ui_manager.RegisterScreen(drag_teach); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(drag_teach, true);
+            break;
+        }
+
+        case 1: // Blockly_Runner
+        {
+            break;
+        }
+
+        case 2: // Quick_Move
+        {
+            Quick_Move *quick_move = new Quick_Move(tft, button);
+            ui_manager.RegisterScreen(quick_move); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(quick_move, true);
+            break;
+        }
+
+        case 3: // Firmware
+        {
+            Firmware *firmware = new Firmware(tft, button);
+            ui_manager.RegisterScreen(firmware); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(firmware, true);
+            break;
+        }
+
+        case 4: // Calibration
+        {
+            Calibration *calibration = new Calibration(tft, button);
+            ui_manager.RegisterScreen(calibration); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(calibration, true);
+            break;
+        }
+        }
+    }
+
+    else if (btn == BTN4)
+    {
+        button.Wait();
+        ui_manager.Go_To(ScreenID::ScreenID_Home);
+    }
 }

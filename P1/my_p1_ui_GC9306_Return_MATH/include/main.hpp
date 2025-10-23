@@ -56,10 +56,21 @@ lcd_cmd_t lcd_gc9306[] = {
     {0x2C, {0}, 0},         // Memory Write
 };
 
+void lcd_turn_on() {
+    // 打开背光
+    digitalWrite(TFT_BL, HIGH);
 
-void Init_GC9306() {
+    // 发 Display ON 指令
+    tft.writecommand(0x29);
+}
 
+void Init_24QG217_13(bool power_on = false) {
     tft.begin();
+
+    // 背光控制引脚
+    pinMode(TFT_BL, OUTPUT);
+    digitalWrite(TFT_BL, LOW);  // 关闭背光（先完全黑）
+
     pinMode(TFT_RST, OUTPUT);
     digitalWrite(TFT_RST, HIGH);
     delay(120);
@@ -68,18 +79,52 @@ void Init_GC9306() {
     digitalWrite(TFT_RST, HIGH);
     delay(120);
 
+    // 初始化指令
     for (uint8_t i = 0; i < (sizeof(lcd_gc9306) / sizeof(lcd_cmd_t)); i++) {
-        tft.writecommand(lcd_gc9306[i].cmd);
-        for (int j = 0; j < (lcd_gc9306[i].len & 0x7F); j++) {
+        uint8_t cmd = lcd_gc9306[i].cmd;
+        uint8_t len = lcd_gc9306[i].len;
+
+        // 跳过 Display ON (0x29) 以防过早点亮
+        if (cmd == 0x29 && !power_on) continue;
+
+        tft.writecommand(cmd);
+        for (int j = 0; j < (len & 0x7F); j++) {
             tft.writedata(lcd_gc9306[i].data[j]);
         }
 
-        if (lcd_gc9306[i].len & 0x80) {
-            delay(120);  // 带延时标志的命令延时
-        }
+        if (len & 0x80) delay(120);
     }
     delay(1000);
+    lcd_turn_on();
+
 }
+
+
+
+//上一版的屏幕
+// void Init_GC9306() {
+
+//     tft.begin();
+//     pinMode(TFT_RST, OUTPUT);
+//     digitalWrite(TFT_RST, HIGH);
+//     delay(120);
+//     digitalWrite(TFT_RST, LOW);
+//     delay(100);
+//     digitalWrite(TFT_RST, HIGH);
+//     delay(120);
+
+//     for (uint8_t i = 0; i < (sizeof(lcd_gc9306) / sizeof(lcd_cmd_t)); i++) {
+//         tft.writecommand(lcd_gc9306[i].cmd);
+//         for (int j = 0; j < (lcd_gc9306[i].len & 0x7F); j++) {
+//             tft.writedata(lcd_gc9306[i].data[j]);
+//         }
+
+//         if (lcd_gc9306[i].len & 0x80) {
+//             delay(120);  // 带延时标志的命令延时
+//         }
+//     }
+//     delay(1000);
+// }
 
 
 

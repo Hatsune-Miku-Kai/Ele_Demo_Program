@@ -131,7 +131,7 @@ void Free_Move::Update_UI()
     if(millis() - time > 150)
     {
         time = millis();
-        SendArray(Send_Buffer, Recv_Buffer);
+        // SendArray(Send_Buffer, Recv_Buffer);
 
         UpdateAngle(J1 , J2, J3, 0);
         ultraArmP1.rot = (J1) / 180.0 * PI;//1.75;-0.175, 0.060, 1.569

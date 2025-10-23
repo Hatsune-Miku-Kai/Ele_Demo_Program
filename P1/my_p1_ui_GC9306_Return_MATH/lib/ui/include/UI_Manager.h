@@ -9,6 +9,8 @@
 
 #include <Arduino.h>
 
+// extern std::vector<uint8_t> Data;
+
 //用以管理UI界面,并为每个UI提供返回和跳转接口
 class UI_Manager
 {
@@ -20,6 +22,8 @@ public:
     void Go_Home();//返回Home界面
     bool Go_To(Screen_Base::ScreenID target_id);//跳转到指定UI界面
     void RegisterScreen(Screen_Base* screen);//注册页面到内部列表
+
+
     Screen_Base* GetRegisteredScreenByID(Screen_Base::ScreenID id);//查找已注册页面
 
 
@@ -29,8 +33,12 @@ public:
 
     Screen_Base* home_screen = nullptr;//表示对于所有UI而言的Home结点
 
+    // Screen_Base* error_screen = nullptr;//表示错误界面
+
 private:
     std::vector<Screen_Base*> registered_pages;//已注册页面列表,也可以反应页面的前后关系
+
+    
 };
 
 

@@ -80,10 +80,10 @@ void Read_Msg(int readArray[8])
     for (int i = 0; i < message.data_length_code; i++)
     {
       readArray[i] = message.data[i];
-      Serial.print(message.data[i], HEX);
-      Serial.print(" ");
+      // Serial.print(message.data[i], HEX);
+      // Serial.print(" ");
     }
-    Serial.println();
+    // Serial.println();
   }
 }
 
@@ -188,6 +188,7 @@ void Motor_dm::Clear_Err(uint8_t *id, uint8_t len)
 }
 
 
+
 /**
  * @brief 设置多个电机的目标角度
  * @param id 电机ID数组
@@ -205,6 +206,7 @@ void Motor_dm::Set_Angles(uint8_t *id, uint8_t len, float *angles, float speed)
     speed = 100;
     float speed1 = speed * 1.8;
 
+  is_exceed_angles = 0; //解除软限位
   if (is_exceed_angles == 0)
   {
     for (int i = 0; i < len; i++)
@@ -229,6 +231,31 @@ void Motor_dm::Set_Angles(uint8_t *id, uint8_t len, float *angles, float speed)
     printf("Joint %d must in range %d to %d\n\r", is_exceed_angles, JOINT_MIN_ARR_DM[is_exceed_angles - 1], JOINT_MAX_ARR_DM[is_exceed_angles - 1]);
   }
 }
+
+void Motor_dm::Set_Angle_Single(uint8_t id, float angle, float speed)
+{
+  
+  if(speed > 100)
+    speed = 100;
+    float speed1 = speed * 1.8;
+
+
+      float rad = (angle / 180.00) * 3.14;
+      float angles_speed = (speed1 / 180.00) * 3.14;
+      Set_Rad(id, rad, angles_speed);
+
+
+      uint8_t start = readArray[4] & 0x0F;
+
+      uint16_t temp = start << 8 | readArray[5];
+      float temp_float = (float)(120 - ((temp / 4095.0) *240.0));
+      Serial.printf("%0.2f\n\r",temp_float);
+
+      liju = temp_float;
+}
+
+
+
 
 /**
  * @brief 设置多个电机的目标弧度位置和运动速度
@@ -300,6 +327,14 @@ Angles Motor_dm::Get_Angles(uint8_t *id, uint8_t len)
   return angles;
 }
 
+int Motor_dm::Get_Angle_Single(uint8_t id)
+{
+  int angle = Get_Angle(id);
+  Serial.print(angle);
+  Serial.print(" ");
+  return angle;
+}
+
 Rads Motor_dm::Get_Rads(uint8_t *id, uint8_t len)
 {
   Rads rads;
@@ -312,6 +347,62 @@ Rads Motor_dm::Get_Rads(uint8_t *id, uint8_t len)
   Serial.println();
   return rads;
 }
+
+/**
+ * @brief 获取多个电机的线圈平均温度
+ * @param id 电机ID数组，包含需要读取温度的电机ID
+ * @param len 电机数量，表示id数组的长度
+ * @return Temperature 返回温度数组，其中每个元素对应一个电机的温度值
+ * @note 温度数据从CAN总线返回消息的第7个字节读取
+ *       温度值存储在返回数组中的索引为 id[i] - 1 的位置
+ *       函数执行过程中会将温度值通过串口打印输出
+ */
+Temperature Motor_dm::Get_Temperature(uint8_t *id, uint8_t len)
+{
+  Temperature temperature;
+  for (int i = 0; i < len; i++)
+  {
+    int frame_id = (0x01 << 8) | id[i];
+    Send_Msg(power_on_array, 8, frame_id);
+    Read_Msg(readArray);
+
+    int temp = readArray[7];
+    temperature[id[i] - 1] = temp;
+    Serial.print(temperature[id[i] - 1]);
+    Serial.print(" ");
+  }
+  Serial.println();
+  return temperature;
+}
+
+
+/**
+ * @brief 获取多个电机的MOS管温度
+ * @param id 电机ID数组，包含需要读取MOS管温度的电机ID
+ * @param len 电机数量，表示id数组的长度
+ * @return Temperature 返回温度数组，其中每个元素对应一个电机的MOS管温度值
+ * @note MOS管温度数据从CAN总线返回消息的第6个字节读取
+ *       温度值存储在返回数组中的索引为 id[i] - 1 的位置
+ *       函数执行过程中会将温度值通过串口打印输出
+ */
+Temperature Motor_dm::Get_MOS_Temperature(uint8_t *id, uint8_t len)
+{
+  Temperature temperature;
+  for (int i = 0; i < len; i++)
+  {
+    int frame_id = (0x01 << 8) | id[i];
+    Send_Msg(power_on_array, 8, frame_id);
+    Read_Msg(readArray);
+
+    int temp = readArray[6];
+    temperature[id[i] - 1] = temp;
+    Serial.print(temperature[id[i] - 1]);
+    Serial.print(" ");
+  }
+  Serial.println();
+  return temperature;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

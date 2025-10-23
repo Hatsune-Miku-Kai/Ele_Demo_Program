@@ -103,7 +103,7 @@ void Save::Draw_UI()
 void Save::Update_UI()
 {
     uint8_t btn = button.Get_Button_Status(); // 读取当前按键
-    Serial.println(btn);
+    // Serial.println(btn);
     int8_t dir = 0;
     if (btn == BTN1)
         dir = 1; // 下
