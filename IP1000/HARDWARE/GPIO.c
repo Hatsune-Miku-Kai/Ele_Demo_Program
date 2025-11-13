@@ -37,7 +37,7 @@ void GPIO_Digital_Init()
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
-    // PA7
+    // PA5~7
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_5 | GPIO_Pin_6;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 

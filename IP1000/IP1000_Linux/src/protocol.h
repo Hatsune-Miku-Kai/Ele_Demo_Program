@@ -13,12 +13,16 @@
 #include <iomanip>
 #include <chrono>
 #include <poll.h>
+
+uint16_t Check_CRC_Serial(uint8_t *data, uint16_t length, uint8_t is_high_first);
+void Check_Power_On();
+int gpio_read_value(int gpio);
 class SerialPort {
 public:
     SerialPort(const std::string& port, unsigned int baud)
         : fd_(-1)
     {
-        fd_ = open(port.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
+        fd_ = open(port.c_str(), O_RDWR | O_NOCTTY );//  | O_NONBLOCK
         if (fd_ < 0) {
             perror("[Error] open serial port");
             return;
@@ -45,6 +49,18 @@ public:
         cfsetispeed(&tty, speed);
         cfsetospeed(&tty, speed);
 
+
+        
+        // 原始模式配置
+	tty.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
+                 INLCR | IGNCR | ICRNL | IXON | IXOFF | IXANY);
+	tty.c_oflag &= ~(OPOST | ONLCR | OCRNL); 
+	tty.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+	tty.c_cflag &= ~(CSIZE | PARENB);
+	tty.c_cflag |= (CS8 | CLOCAL | CREAD);
+	tty.c_cflag &= ~CRTSCTS; // 禁止硬件流控
+
+        
         // 8N1
         tty.c_cflag &= ~PARENB;
         tty.c_cflag &= ~CSTOPB;
@@ -57,8 +73,8 @@ public:
         tty.c_iflag &= ~(IXON | IXOFF | IXANY);
         tty.c_oflag &= ~OPOST;
 
-        tty.c_cc[VMIN]  = 0; // 非阻塞
-        tty.c_cc[VTIME] = 0;
+        tty.c_cc[VMIN]  = 3; // 非阻塞
+        tty.c_cc[VTIME] = 2;
 
         if (tcsetattr(fd_, TCSANOW, &tty) != 0) {
             perror("[Error] tcsetattr");
@@ -76,7 +92,7 @@ public:
 
         //ioctl(fd_, TIOCMSET, &status);
 
-        tcflush(fd_, TCIOFLUSH);
+        //tcflush(fd_, TCIOFLUSH);
 
         std::cout << "[Init] " << port << " opened @" << baud << "bps\n";
     }
@@ -108,7 +124,6 @@ public:
         return total_read;
     }
 
-    // 写数据
     void Write(const uint8_t* data, size_t len)
     {
         std::lock_guard<std::mutex> lock(mtx_);
@@ -127,8 +142,8 @@ public:
             total_written += n;
         }
 
-        // 不再 tcflush(fd_, TCIFLUSH);
-        tcdrain(fd_);  // 确保数据发送完成
+        //tcflush(fd_, TCIFLUSH);
+        tcdrain(fd_);
     }
 
 
@@ -155,6 +170,8 @@ void ClearAllBuffers() {
         tcflush(fd_, TCIOFLUSH);  // 清空输入和输出缓冲区
     }
 }
+
+
 
 
 private:

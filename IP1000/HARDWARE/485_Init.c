@@ -218,7 +218,7 @@ void Handle_USART1_Data(uint8_t* data, uint8_t len)
 			uint8_t temp[cmd_len + 1];
 			memcpy(temp, data + i, cmd_len + 1);//将命令进行校验
 			
-			uint16_t crc = Check_CRC_Serial(temp, len - 2 , 1);
+			uint16_t crc = Check_CRC_Serial(temp, cmd_len + 1 , 1);
 			
             if(CRC1 != (crc >> 8) && CRC2 != crc )
             {
@@ -318,6 +318,10 @@ void DMA2_Stream7_IRQHandler(void)
 void DMA_Send_Data(uint8_t *data, uint16_t len)
 {
 	memcpy(USART1_TX_BUF, data, len);				//复制数据到DMA发送缓存区
+//	for(int i = 0 ; i < len; i++)
+//	{
+//		SEGGER_RTT_printf(0,"%02x ",data[i]);
+//	}
 	while (DMA_GetCmdStatus(DMA2_Stream7) != DISABLE);	//确保DMA可以被设置
 	DMA_SetCurrDataCounter(DMA2_Stream7, len);			//设置数据传输长度
 	DMA_Cmd(DMA2_Stream7,ENABLE);						//打开DMA数据流，开始发送

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Oct 29 18:48:23 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Nov 03 19:40:38 2025
 <BR><P>
 <H3>Maximum Stack Usage =        320 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -826,7 +826,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_USART1_Data
 </UL>
 
-<P><STRONG><a name="[86]"></a>Handle_USART1_Data</STRONG> (Thumb, 150 bytes, Stack size 40 bytes, 485_init.o(.text))
+<P><STRONG><a name="[86]"></a>Handle_USART1_Data</STRONG> (Thumb, 146 bytes, Stack size 40 bytes, 485_init.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = Handle_USART1_Data &rArr; Handle_USART1_Cmd &rArr; Check_CRC_Serial
 </UL>
 <BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
@@ -839,7 +839,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[2f]"></a>USART1_IRQHandler</STRONG> (Thumb, 168 bytes, Stack size 16 bytes, 485_init.o(.text))
+<P><STRONG><a name="[2f]"></a>USART1_IRQHandler</STRONG> (Thumb, 166 bytes, Stack size 16 bytes, 485_init.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 108<LI>Call Chain = USART1_IRQHandler &rArr; Handle_USART1_Data &rArr; Handle_USART1_Cmd &rArr; Check_CRC_Serial
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_ClearFlag
