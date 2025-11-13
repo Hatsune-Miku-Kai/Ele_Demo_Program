@@ -17,6 +17,15 @@
 uint16_t Check_CRC_Serial(uint8_t *data, uint16_t length, uint8_t is_high_first);
 void Check_Power_On();
 int gpio_read_value(int gpio);
+void PrintHex(const std::string &tag, const uint8_t *data, size_t len);
+void Run();
+void Config_STM32F407_GPIO(uint8_t num);
+void Set_Virtual_IO_Status(uint8_t pin, uint8_t status);
+void Get_Virtual_IO_Status(uint8_t pin);
+void Handle_Recv_Buffer(uint8_t *data);
+void Handle_the_host_computer();
+
+
 class SerialPort {
 public:
     SerialPort(const std::string& port, unsigned int baud)
@@ -52,13 +61,13 @@ public:
 
         
         // 原始模式配置
-	tty.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
+	    tty.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
                  INLCR | IGNCR | ICRNL | IXON | IXOFF | IXANY);
-	tty.c_oflag &= ~(OPOST | ONLCR | OCRNL); 
-	tty.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-	tty.c_cflag &= ~(CSIZE | PARENB);
-	tty.c_cflag |= (CS8 | CLOCAL | CREAD);
-	tty.c_cflag &= ~CRTSCTS; // 禁止硬件流控
+	    tty.c_oflag &= ~(OPOST | ONLCR | OCRNL); 
+	    tty.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+	    tty.c_cflag &= ~(CSIZE | PARENB);
+	    tty.c_cflag |= (CS8 | CLOCAL | CREAD);
+	    tty.c_cflag &= ~CRTSCTS; // 禁止硬件流控
 
         
         // 8N1
@@ -170,9 +179,6 @@ void ClearAllBuffers() {
         tcflush(fd_, TCIOFLUSH);  // 清空输入和输出缓冲区
     }
 }
-
-
-
 
 private:
     int fd_;
