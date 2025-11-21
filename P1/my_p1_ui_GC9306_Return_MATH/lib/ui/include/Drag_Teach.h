@@ -32,7 +32,6 @@ private:
     const int menuCount = 2;
 
     int selectedIndex = 0; // 当前选中
-    // int lastIndex = 0;     // 上一次选中
 
     // 位置
     const int starX = 10;//星号起始X,坐标Y沿用lineHeight

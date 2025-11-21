@@ -8,8 +8,7 @@
 #include "Connect_logo.h"
 #include "Angles_logo.h"
 
-
-//Global_Data
+// Global_Data
 #include "Global_Data.h"
 
 extern UI_Manager ui_manager;
@@ -32,7 +31,7 @@ void Home::Draw_Static()
 
 void Home::Draw_Update()
 {
-    vTaskDelay(50);
+    vTaskDelay(30);
 #ifdef UltraArm_P1
     // SendArray(Send_Buffer, Recv_Buffer);
 
@@ -236,7 +235,7 @@ void Home::MyCobot_Pro_450_UI()
     // 右上角绿色圆,若未上电,红圈
     // if(Global_Data::Robot_States["Power Code"]== 1)
     // {
-        tft.fillCircle(tft.width() - 30, 20, 10, TFT_GREEN);
+    tft.fillCircle(tft.width() - 30, 20, 10, TFT_GREEN);
     // }
 
     // else if(Global_Data::Robot_States["Power Code"] == 0 || Global_Data::Robot_States["Power Code"] == 2)
@@ -249,17 +248,16 @@ void Home::MyCobot_Pro_450_UI()
     //     ui_manager.Change_UI(error, true);
     // }
 
-
     // //对勾
     // tft.drawLine(283, 20, 287, 26, TFT_BLACK);
     // tft.drawLine(288, 26, 298, 16, TFT_BLACK);
 
     // // 加粗 2px
-    // for(int i=-1; i<=1; i++) 
+    // for(int i=-1; i<=1; i++)
     // {  // i控制偏移
     //     tft.drawLine(281, 20+i, 287, 26+i, TFT_BLACK);
     //     tft.drawLine(282+i, 20, 287+i, 26, TFT_BLACK);
-    
+
     //     tft.drawLine(286, 26+i, 297, 15+i, TFT_BLACK);
     //     tft.drawLine(287+i, 26, 297+i, 15, TFT_BLACK);
     // }
@@ -303,13 +301,11 @@ void Home::MyCobot_Pro_450_UI()
 
     Create_Angles_Sprite();
 }
-#endif
 
-#ifdef MyCobot_Pro_450
 void Home::UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, float j6)
 {
-    int leftX = 40 + 20;    //这里+号表示修改过,去掉+恢复原来的布局
-    int rightX = 180 + 30;  //这里+号表示修改过,去掉+恢复原来的布局
+    int leftX = 40 + 20;   // 这里+号表示修改过,去掉+恢复原来的布局
+    int rightX = 180 + 30; // 这里+号表示修改过,去掉+恢复原来的布局
     int showY = 62;
 
     AngleSprite angles[7] = {
@@ -318,9 +314,7 @@ void Home::UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, flo
         {&J3sprite, j3, leftX, showY + 70},
         {&J4sprite, j4, rightX, showY},
         {&J5sprite, j5, rightX, showY + 35},
-        {&J6sprite, j6, rightX, showY + 70}
-        };
-        
+        {&J6sprite, j6, rightX, showY + 70}};
 
     char buf[6]; // 用于存格式化数字
 
@@ -329,7 +323,7 @@ void Home::UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, flo
         angles[i].sprite->fillSprite(TFT_BLACK);           // 清空 sprite
         angles[i].sprite->setFreeFont(&FreeSansBold9pt7b); // 设置字体
         angles[i].sprite->setTextColor(TFT_WHITE);
-        angles[i].sprite->setTextDatum(TR_DATUM);          // 右对齐
+        angles[i].sprite->setTextDatum(TR_DATUM); // 右对齐
 
         sprintf(buf, "%5.1f", angles[i].value);                 // 固定宽度 5, 保留 1 位小数
         angles[i].sprite->drawString(String(buf), 50, 0);       // x 坐标用 sprite 宽度右对齐
@@ -341,7 +335,7 @@ void Home::UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, flo
     IP_Angles_sprite.setTextColor(TFT_WHITE);
     IP_Angles_sprite.setTextDatum(TL_DATUM);
     IP_Angles_sprite.drawString(String(IP_Angles_UI.c_str()), 0, 2);
-    IP_Angles_sprite.pushSprite(88, 175);//(98,175)
+    IP_Angles_sprite.pushSprite(88, 175); //(98,175)
 }
 #endif
 
@@ -382,15 +376,14 @@ void Home::UltraArm_P1_Select()
 void Home::MyCobot_Pro_450_Select()
 {
     uint8_t btn = button.Get_Button_Status();
-
-    // if (btn == BTN1) // 第一版暂时不用
-    // {
-    //     Program *program = new Program(tft, button);
-    //     ui_manager.RegisterScreen(program); // 将页面放入注册列表
-    //     button.Wait();
-    //     Delete_Angles_Sprite();
-    //     ui_manager.Change_UI(program, true);
-    // }
+    if (btn == BTN1) 
+    {
+        Program *program = new Program(tft, button);
+        ui_manager.RegisterScreen(program); // 将页面放入注册列表
+        button.Wait();
+        Delete_Angles_Sprite();
+        ui_manager.Change_UI(program, true);
+    }
 
     if (btn == BTN3)
     {
@@ -417,17 +410,16 @@ void Home::Handle_Data(std::vector<uint8_t> &data)
     for (uint8_t i = 0; i < (ANGLES_DATA_LEN * 2); i += 2)
     {
         float temp = (float)(data[i] << 8 | data[i + 1]);
-        if(temp > 33000)
+        if (temp > 33000)
             temp -= 65536;
         temp /= 100.0f;
         Angles_Data[idx++] = temp;
     }
 
-
-// 更新IP地址和端口号
+    // 更新IP地址和端口号
     std::string ip = "";
     uint16_t port = 0;
-    for(uint8_t i = IP_DATA_START; i < IP_DATA_START + IP_DATA_LEN; i++)
+    for (uint8_t i = IP_DATA_START; i < IP_DATA_START + IP_DATA_LEN; i++)
     {
         ip += std::to_string(data[i]) + ".";
     }
@@ -436,9 +428,6 @@ void Home::Handle_Data(std::vector<uint8_t> &data)
     ip.pop_back();
     ip += " : " + std::to_string(port);
     IP_Angles_UI = ip;
-
-//获取机械臂状态
-    //Get_Robot_State_Data(Global_Data::Data, Global_Data::Robot_States);//基类方法,更新机械臂状态
 }
 
 void Home::Create_Angles_Sprite()

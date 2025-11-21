@@ -8,6 +8,7 @@
 #include "Can_Save_logo.h"
 #include "Return_logo.h"
 #include "Pause_logo.h"
+#include "Cannot_Return_logo.h"
 
 extern UI_Manager ui_manager;
 
@@ -22,8 +23,6 @@ Play_From_RAM_OR_FLASH::~Play_From_RAM_OR_FLASH()
 void Play_From_RAM_OR_FLASH::Draw_Static()
 {
     Draw_UI();
-    // SendGcode("$X\r\n");  // 解锁机器
-    // SendGcode("G12\r\n"); // 拖动示教复现
 }
 
 void Play_From_RAM_OR_FLASH::Draw_Update()
@@ -35,17 +34,28 @@ void Play_From_RAM_OR_FLASH::Handle_Button()
 {
     uint8_t btn = button.Get_Button_Status();
 
-    if (btn == BTN3)
+    if (btn == BTN3 && can_save)
     {
+        can_save = 0;
         Save_To_Blockly_Runner *save_to_blockly_runner = new Save_To_Blockly_Runner(tft, button);
         ui_manager.RegisterScreen(save_to_blockly_runner); // 将页面放入注册列表
+        Second_sprite.deleteSprite();
+        Play_sprite.deleteSprite();
         button.Wait();
         ui_manager.Change_UI(save_to_blockly_runner);
     }
 
     else if (btn == BTN4)
     {
+        if (pause_flag == 0)
+        {
+            return;
+        }
+
+        Program_Stop_450(1);
         button.Wait();
+        Second_sprite.deleteSprite();
+        Play_sprite.deleteSprite();
         ui_manager.Go_Back();
     }
 }
@@ -53,6 +63,10 @@ void Play_From_RAM_OR_FLASH::Handle_Button()
 void Play_From_RAM_OR_FLASH::Draw_UI()
 {
     tft.fillScreen(TFT_BLACK);
+
+    // Create sprites only once
+    Second_sprite.createSprite(55, 20);
+    Play_sprite.createSprite(100, 25);
 
     // Program 标题 12pt
     tft.setFreeFont(&FreeSansBold12pt7b);
@@ -65,20 +79,10 @@ void Play_From_RAM_OR_FLASH::Draw_UI()
 
     tft.setFreeFont(&FreeSansBold9pt7b);
     tft.setTextColor(TFT_WHITE);
+    tft.drawString("Time : " + String(ui_manager.total_time) + "s", 30, 65);
 
-    tft.setCursor(30, 70);
-    tft.print("Points :");
-
-    tft.setCursor(30, 95);
-    tft.print("Time :");
-
-    tft.setCursor(90, 95);
-    tft.print(0);
-    tft.print("s");
-
-    tft.setTextColor(TFT_BLUE);
-    tft.setCursor(30, 175);
-    tft.print("Pausing...");
+    tft.setTextColor(TFT_GREEN);
+    tft.drawString("Stop", 32, 155);
 
     tft.pushImage(15, 205, 30, 30, start_logo);
     tft.pushImage(105, 205, 30, 30, stop_logo);
@@ -93,104 +97,145 @@ void Play_From_RAM_OR_FLASH::Update_UI()
 {
     uint8_t btn = button.Get_Button_Status();
     unsigned long now = millis();
+
+    // ============ Playing 状态 ============
     if (Play_State)
     {
-        // --- Stop 状态 ---
-        if (btn == BTN2 && last_btn != BTN2) // 只有边沿触发
+        // ---------- Stop ----------
+        if (btn == BTN2 && last_btn != BTN2)
         {
-            tft.fillRect(30, 155, 200, 30, TFT_BLACK);
-            tft.setTextColor(TFT_GREEN);
-            tft.setCursor(30, 175);
-            tft.print("Stop");
-            tft.pushImage(190, 208, 30, 30, can_save_logo);
             pause_flag = -1;
+
+            Program_Stop_450(1);
+
+            Play_sprite.fillSprite(TFT_BLACK);
+            Play_sprite.setTextColor(TFT_GREEN);
+            Play_sprite.setFreeFont(&FreeSansBold9pt7b);
+            Play_sprite.drawString("Stop", 0, 0);
+            Play_sprite.pushSprite(30, 155);
+
+            tft.pushImage(190, 208, 30, 30, can_save_logo);
+            tft.pushImage(278, 210, 32, 28, return_logo);
+
             can_save = 1;
         }
 
-        // --- Pause / Resume ---
-        if (btn == BTN1 && last_btn != BTN1) // 边沿触发
+        // ---------- Pause / Resume ----------
+        if (btn == BTN1 && last_btn != BTN1)
         {
-            if (pause_flag == 0)
+            if (pause_flag == 0) // Pause
             {
+                pause_flag = 1;
+
+                Program_Pause_450(1);
+
+                Play_sprite.fillSprite(TFT_BLACK);
+                Play_sprite.setTextColor(TFT_BLUE);
+                Play_sprite.setFreeFont(&FreeSansBold9pt7b);
+                Play_sprite.drawString("Pausing...", 0, 0);
+                Play_sprite.pushSprite(30, 155);
+
                 tft.fillRect(15, 205, 30, 32, TFT_BLACK);
                 tft.pushImage(15, 205, 30, 30, start_logo);
+                tft.pushImage(190, 208, 30, 30, cannot_save_logo);
+                tft.pushImage(278, 210, 32, 28, return_logo);
 
-                tft.fillRect(30, 155, 200, 30, TFT_BLACK);
-                tft.setTextColor(TFT_BLUE);
-                tft.setCursor(30, 175);
-                tft.print("Pausing...");
-                pause_flag = 1;
                 elapsed_time += now - last_update;
             }
-            else if (pause_flag == 1)
+            else if (pause_flag == 1) // Resume
             {
+                pause_flag = 0;
+
+                Program_Resume_450();
+
+                Play_sprite.fillSprite(TFT_BLACK);
+                Play_sprite.setTextColor(TFT_YELLOW);
+                Play_sprite.setFreeFont(&FreeSansBold9pt7b);
+                Play_sprite.drawString("Playing...", 0, 0);
+                Play_sprite.pushSprite(30, 155);
 
                 tft.fillRect(15, 205, 30, 32, TFT_BLACK);
                 tft.pushImage(15, 205, 30, 32, pause_logo);
+                tft.pushImage(190, 208, 30, 30, cannot_save_logo);
+                tft.pushImage(278, 210, 32, 28, cannot_return_logo);
 
-                tft.fillRect(30, 155, 200, 30, TFT_BLACK);
-                tft.setTextColor(TFT_YELLOW);
-                tft.setCursor(30, 175);
-                tft.print("Playing...");
-                pause_flag = 0;
                 last_update = now;
             }
         }
 
-        // --- 更新时间累积 ---
+        // ---------- 累计时间 ----------
         if (pause_flag == 0)
         {
             elapsed_time += now - last_update;
             last_update = now;
         }
 
-        // --- 每秒刷新显示 ---
+        // ---------- 每秒刷新倒计时 ----------
         unsigned long sec = elapsed_time / 1000;
         if (sec != last_sec)
         {
             last_sec = sec;
-            tft.fillRect(90, 80, 60, 40, TFT_BLACK);
-            tft.setTextColor(TFT_WHITE);
-            tft.setCursor(90, 95);
-            tft.print(sec);
-            tft.print("s");
+
+            if (play_time > 0 && pause_flag == 0)
+                play_time--; // 倒数 1 秒
+
+            // ======== 显示秒数（即使是0也要显示） ========
+            Second_sprite.fillSprite(TFT_BLACK);
+            Second_sprite.setTextColor(TFT_WHITE);
+            Second_sprite.setFreeFont(&FreeSansBold9pt7b);
+            Second_sprite.drawString(String(play_time) + "s", 0, 0);
+            Second_sprite.pushSprite(88, 65);
+
+            // ======== 自动停止 —— 放在显示之后 ========
+            if (play_time <= 0)
+            {
+                Play_State = false;
+                pause_flag = -1;
+                can_save = 1;
+
+                Play_sprite.fillSprite(TFT_BLACK);
+                Play_sprite.setTextColor(TFT_GREEN);
+                Play_sprite.setFreeFont(&FreeSansBold9pt7b);
+                Play_sprite.drawString("Stop", 0, 0);
+                Play_sprite.pushSprite(30, 155);
+
+                tft.pushImage(190, 208, 30, 30, can_save_logo);
+                tft.pushImage(278, 210, 32, 28, return_logo);
+
+                last_btn = btn;
+                return;
+            }
         }
 
-        // --- 每 10ms 记录一次点位 ---
-        if (pause_flag == 0 && (now - last_record_time >= 10))
-        {
-            last_record_time = now;
-            point_num++;
-
-            tft.fillRect(95, 50, 60, 30, TFT_BLACK);
-            tft.setTextColor(TFT_WHITE);
-            tft.setCursor(100, 70);
-            tft.print(point_num);
-        }
-
-        // 保存按键状态
         last_btn = btn;
+        return;
     }
 
+    // ============ 第一次开始 ============
     else if (!Play_State)
     {
-        if(btn == BTN1 && last_btn != BTN1)
+        if (btn == BTN1 && last_btn != BTN1)
         {
+            play_time = ui_manager.total_time;
             Play_State = true;
+
+            Run_Record_450();
+
             tft.fillRect(15, 205, 30, 32, TFT_BLACK);
             tft.pushImage(15, 205, 30, 32, pause_logo);
-            last_btn = btn;
-            tft.fillRect(30, 155, 200, 30, TFT_BLACK);
-            tft.setTextColor(TFT_YELLOW);
-            tft.setCursor(30, 175);
+            tft.pushImage(278, 210, 32, 28, cannot_return_logo);
+
+            Play_sprite.fillSprite(TFT_BLACK);
+            Play_sprite.setTextColor(TFT_YELLOW);
+            Play_sprite.setFreeFont(&FreeSansBold9pt7b);
+            Play_sprite.drawString("Playing...", 0, 0);
+            Play_sprite.pushSprite(30, 155);
+
+
             last_update = now;
-            tft.print("Playing...");
-
-            // SendGcode("$X\r\n");//解锁机器
-            // SendGcode("G151\r\n");//发送黄色灯Gcode指令
-
-            // SendGcode("$X\r\n");  // 解锁机器
-            // SendGcode("G12");//复现
         }
+
+        last_btn = btn;
     }
 }
+

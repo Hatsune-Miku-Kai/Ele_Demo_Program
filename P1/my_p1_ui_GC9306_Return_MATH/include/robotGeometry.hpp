@@ -2,7 +2,7 @@
 #ifndef ROBOTGEOMETRY_HPP_
 #define ROBOTGEOMETRY_HPP_
 #include <math.h>
-#include "config.hpp"
+#include "config.h"
 
 #ifndef PI
 #define PI 3.1415926535

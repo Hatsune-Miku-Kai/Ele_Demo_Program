@@ -2,7 +2,11 @@
 
 
 namespace Global_Data {
-    std::vector<uint8_t> Data(256,0x00);
+    std::vector<uint8_t> Data(256,0x00);//发送数据的数组,没有帧头和校验位和命令和长度
+    std::vector<uint8_t> Recv_Data_Origin;//接收数据的原始数组,没有帧头和校验位,包含命令和长度
+    std::vector<uint8_t> BackEnd_Data;//后端主动发送的数据,没有帧头和校验位,包含命令和长度
+    std::unordered_map<uint8_t, Handle_Cmd_Func> Cmd_Table;//通过cmd找到对应的函数,利用无序映射表
+
     std::map<std::string, uint16_t> Robot_States
     {
         {"Power Code", 0},//is power on

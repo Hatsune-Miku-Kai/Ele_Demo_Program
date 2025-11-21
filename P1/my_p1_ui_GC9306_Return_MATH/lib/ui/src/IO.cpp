@@ -168,16 +168,16 @@ void IO::MyCobot_Pro_450_Select()
 {
     uint8_t btn = button.Get_Button_Status();
 
-    // if(btn == BTN1)  第一版暂时不用
-    // {
-    //     if(!(ui_manager.Go_To(ScreenID::ScreenID_Program)))
-    //     {
-    //         Program* program = new Program(tft, button);
-    //         ui_manager.RegisterScreen(program);//将页面放入注册列表
-    //         button.Wait();
-    //         ui_manager.Change_UI(program, true);
-    //     }
-    // }
+    if(btn == BTN1)
+    {
+        if(!(ui_manager.Go_To(ScreenID::ScreenID_Program)))
+        {
+            Program* program = new Program(tft, button);
+            ui_manager.RegisterScreen(program);//将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(program, true);
+        }
+    }
 
     if(btn == BTN2)
     {

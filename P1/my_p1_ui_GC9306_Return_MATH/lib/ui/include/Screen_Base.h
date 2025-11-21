@@ -8,7 +8,7 @@
 #define ERROR_DATA_START 24
 #define ERROR_DATA_LEN 32
 
-#define IP_POWER_ON_START 80
+#define POWER_ON_START 72
 
 #include <Arduino.h>
 #include <TFT_eSPI.h>
@@ -17,6 +17,7 @@
 #include <string>
 #include "SPI.hpp"
 #include "Cmd.h"
+#include "Common.h"
 
 //Global_Data
 #include "Global_Data.h"
@@ -54,7 +55,14 @@ public:
         ScreenID_Quick_Move,
         ScreenID_Free_Move,
         ScreenID_Jog_Select_Move,
-        ScreenID_Coords
+        ScreenID_Coords,
+        ScreenID_Fine_Tuning_Angles,
+        ScreenID_Free_Move_Coords,
+        ScreenID_Angle_Select_Move,
+        ScreenID_Fine_Tuning_Coords,
+        ScreenID_Coords_Select_Move,
+        ScreenID_Record_Warning_Less_Time,
+        ScreenID_Record_Warning_Limit_Time,
     };
 
     explicit Screen_Base(TFT_eSPI& tft, Button& button);
@@ -68,9 +76,7 @@ public:
     virtual void Handle_Button() = 0;
 
     // virtual void Handle_Data(std::vector<uint8_t>& data) = 0;//第一版不加,但是后面一定要加
-    void Get_Robot_State_Data(std::vector<uint8_t> &data, std::map<std::string, uint16_t> &robot_states);//从数据中提取机械臂状态
 
-    void Handle_Robot_States_Data(std::map<std::string, uint16_t>& robot_states);//给所有子类提供处理机械臂状态的接口
 
     ScreenID id; //每个界面都有一个唯一ID,用于识别和管理不同的界面,只要不赋重复值就不会冲突
 

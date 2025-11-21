@@ -1,47 +1,29 @@
-#ifndef __HOME_H__
-#define __HOME_H__
+#ifndef __FINE_TUNING_ANGLES_H__
+#define __FINE_TUNING_ANGLES_H__
 
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
-//关联界面
-#include "Program.h"
-#include "IO.h"
-#include "Connection_Status.h"
-#include "Coords.h"
 
-//math_logic
-#include "robotGeometry.hpp"
-
-//Global_Data
-#include "Global_Data.h"
-
-//关联界面
-#include "Error.h"
+//logo
+#include "Reduce_logo.h"
+#include "Add_logo.h"
+#include "Can_Save_logo.h"
+#include "Return_logo.h"
 
 #define ANGLES_DATA_LEN 6
-
-#define IP_DATA_START 73 // IP起始
-#define IP_DATA_LEN 4 // IP长度
-
-#define PORT_DATA_START 77 // 端口起始
-#define PORT_DATA_LEN 2 // 端口长度
-
-class Home:public Screen_Base
+class Fine_Tuning_Angles : public Screen_Base
 {
 public:
-    Home(TFT_eSPI& tft, Button& button);//派生类的构造函数调用父类构造函数来引用tft
-    ~Home() override;
+    Fine_Tuning_Angles(TFT_eSPI& tft, Button& button);
+    ~Fine_Tuning_Angles();
+
     void Draw_Static() override;
     void Draw_Update() override;
     void Handle_Button() override;
-    //派生类不可以重新声明新的指针,不然会形成菱形继承
 
 
-
-
-//内部函数
-    RobotGeometry ultraArmP1;
+private:
     void Draw_UI();
 
 
@@ -53,6 +35,8 @@ public:
     };
 
 #ifdef MyCobot_Pro_450
+
+
     void UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, float j6);
     void MyCobot_Pro_450_UI();
     void MyCobot_Pro_450_Select();
@@ -67,7 +51,6 @@ public:
     TFT_eSprite J4sprite = TFT_eSprite(&tft);
     TFT_eSprite J5sprite = TFT_eSprite(&tft);
     TFT_eSprite J6sprite = TFT_eSprite(&tft);
-    TFT_eSprite IP_Angles_sprite = TFT_eSprite(&tft);
 
     float Angles_Data[ANGLES_DATA_LEN] = {0.0};
     
@@ -84,6 +67,18 @@ public:
 
 
 #ifdef MyCobot_Pro_450
+
+    bool Move_Up = false;
+    const int menuCount = 6;
+    int selectedIndex = 0; // 当前选中
+    const char *menuItems[6] = {
+        "J1",
+        "J2",
+        "J3",
+        "J4",
+        "J5",
+        "J6"};
+
     std::map<std::string, std::pair<int, int>> Angles_UI = {
         //左列 Angles
         {"J1", {30, 75}},           // {"J1", {10, 75}},
@@ -109,8 +104,6 @@ public:
         {"J6", {270, 135}},     // {"J6", {240, 115}},
     };
 
-// IP
-    std ::string IP_Angles_UI = "";
 #endif
 
 #ifdef UltraArm_P1
@@ -122,8 +115,9 @@ public:
     };
 #endif
 
+
 };
 
 
-#endif
 
+#endif

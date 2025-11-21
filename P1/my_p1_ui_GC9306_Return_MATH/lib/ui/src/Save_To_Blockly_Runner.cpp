@@ -87,10 +87,13 @@ void Save_To_Blockly_Runner::Save_To_Blockly()
     tft.setFreeFont(&FreeSansBold9pt7b);
     tft.fillRect(0, 50, tft.width(), 80, TFT_BLACK);
     tft.fillRect(0, 95, tft.width(), 80, TFT_BLACK);
-    tft.setCursor(110, 125);
-    tft.print("Saving...");
+    tft.setCursor(50, 125);
+    tft.print("Saving Into BlocklyRunner...");
+
+    Save_Record_450_BackEnd(1);
+
     delay(3000);
-    tft.fillRect(110, 100, tft.width(), 80, TFT_BLACK);
+    tft.fillRect(50, 100, tft.width(), 80, TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
     tft.setCursor(110, 125);
     tft.print("Saved!");

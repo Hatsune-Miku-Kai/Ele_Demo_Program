@@ -55,29 +55,39 @@ void Task_Protocal(void *pvParameters)
     while (1)
     {
         Serial_Read();
+        Handle_Cmd(Global_Data::BackEnd_Data);
         // Serial_Write();
         // vTaskDelay(500);
         // Serial.write(Send, sizeof(Send));
     }
 }
 
+// void Task_Handle_Cmd(void *pvParameters)
+// {
+//     while(1)
+//     {
+
+//     }
+// }
+
 
 
 void setup() 
 {
     Init_24QG217_13();//屏幕初始化需要在SPI前面
-    // SPI_Slave_Init();
+    Init_Cmd_Table();
     Serial.begin(1000000);
 
     tft.fillScreen(TFT_BLACK);
-    // tft.pushImage(0, 0, 320, 240, mycobot_logo);
-    // delay(3000);
+    tft.pushImage(0, 0, 320, 240, mycobot_logo);
+    delay(3000);
     ui_manager.home_screen = new Home(tft, button);
     ui_manager.RegisterScreen(ui_manager.home_screen);//将家页面放在列表头
     ui_manager.Change_UI(ui_manager.home_screen, false);
-
+    
     xTaskCreatePinnedToCore(Task_Protocal, "Task_Protocal", 4096, NULL, 1, NULL, 1);
     xTaskCreatePinnedToCore(Task_UI_Manager, "Task_UI_Manager", 4096 * 2, NULL, 1, NULL, 1);
+    // xTaskCreatePinnedToCore(Task_UI_Manager, "Task_Handle_Cmd", 2048, NULL, 2, NULL, 1);
 }
 
 void loop() 

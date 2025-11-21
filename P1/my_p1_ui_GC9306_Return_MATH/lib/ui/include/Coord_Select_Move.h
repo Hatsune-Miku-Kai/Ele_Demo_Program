@@ -1,29 +1,31 @@
-#ifndef _COORDS_H_
-#define _COORDS_H_
+#ifndef __Coord__Select_Move__H__
+#define __Coord__Select_Move__H__
 
 
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
-
 //关联界面
-#include "Program.h"
-#include "Home.h"
-#include "IO.h"
+#include "Quick_Move.h"
+#include "Fine_Tuning_Coords.h"
+
 
 #define COORDS_DATA_START 12 // 坐标数据起始
 #define XYZ_DATA_LEN 3
 #define RXRYRZ_DATA_LEN 3
 #define COORDS_DATA_LEN (XYZ_DATA_LEN + RXRYRZ_DATA_LEN)
 
-class Coords : public Screen_Base
+class Coord_Select_Move : public Screen_Base
 {
 public:
-    Coords(TFT_eSPI& tft, Button& button);
-    ~Coords();
+    Coord_Select_Move(TFT_eSPI& tft, Button& button);
+    ~Coord_Select_Move();
+
     void Draw_Static() override;
     void Draw_Update() override;
     void Handle_Button() override;
+
+private:
 
     struct CoordSprite {
         TFT_eSprite* sprite;
@@ -32,8 +34,6 @@ public:
         int y;
     };
 
-
-private:
     void Draw_UI();
     void Update_UI();
     void UpdateCoords(float x, float y, float z, float rx, float ry, float rz);
@@ -48,10 +48,17 @@ private:
     TFT_eSprite Rxsprite = TFT_eSprite(&tft);
     TFT_eSprite Rysprite = TFT_eSprite(&tft);
     TFT_eSprite Rzsprite = TFT_eSprite(&tft);
-    TFT_eSprite IP_Coords_sprite = TFT_eSprite(&tft);
 
     float Coords_Data[COORDS_DATA_LEN] = {0.0};
-
+        const int menuCount = 6;
+        int selectedIndex = 0; // 当前选中
+        const char *menuItems[6] = {
+        "X",
+        "Y",
+        "Z",
+        "Rx",
+        "Ry",
+        "Rz"};
     std::map<std::string, std::pair<int, int>> Coord_UI = {
         // 左列Coord
         {"X", {30,75}},//{ "X",  {10, 75} },
@@ -76,10 +83,6 @@ private:
         {"Rz", {270, 135}},//{ "Rz", {240, 115} }
     };
 
-    //ip
-    std::string IP_Coords_UI;
 };
-
-
 
 #endif

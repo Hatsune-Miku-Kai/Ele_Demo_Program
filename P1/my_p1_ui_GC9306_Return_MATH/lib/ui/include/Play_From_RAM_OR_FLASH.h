@@ -20,15 +20,21 @@ private:
     void Draw_UI();
     void Update_UI();
 
+#ifdef MyCobot_Pro_450
+        void Start_Run();
+#endif
+
+    TFT_eSprite Play_sprite = TFT_eSprite(&tft);
+    TFT_eSprite Second_sprite = TFT_eSprite(&tft);
+
     int pause_flag = 0;                   
     unsigned long elapsed_time = 0;       
     unsigned long last_update = millis(); 
-    unsigned long last_sec = 0;           
-    uint32_t point_num = 0;               
+    unsigned long last_sec = 0;                 
     uint8_t last_btn = 0; // 上一次按键状态
-    unsigned long last_record_time = 0;   // 上一次记录点位时间
     uint8_t can_save = 0;
     bool Play_State = false;
+    unsigned long play_time = 0;
 };
 
 

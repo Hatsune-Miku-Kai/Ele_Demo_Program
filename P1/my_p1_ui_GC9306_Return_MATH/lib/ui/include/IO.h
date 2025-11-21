@@ -7,7 +7,7 @@
 //关联界面
 #include "Connection_Status.h"
 
-#define IO_DATA_START 68//IO数据起始
+#define IO_DATA_START 56//IO数据起始
 #define IO_DATA_SIZE 4//先返回Input再返回Output
 
 class IO : public Screen_Base

@@ -1,31 +1,28 @@
-#ifndef _COORDS_H_
-#define _COORDS_H_
-
+#ifndef __FREE_MOVE_COORDS_H__
+#define __FREE_MOVE_COORDS_H__
 
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
-
 //关联界面
-#include "Program.h"
-#include "Home.h"
-#include "IO.h"
+#include "Free_Move.h"
 
 #define COORDS_DATA_START 12 // 坐标数据起始
 #define XYZ_DATA_LEN 3
 #define RXRYRZ_DATA_LEN 3
 #define COORDS_DATA_LEN (XYZ_DATA_LEN + RXRYRZ_DATA_LEN)
 
-class Coords : public Screen_Base
+class Free_Move_Coords : public Screen_Base
 {
 public:
-    Coords(TFT_eSPI& tft, Button& button);
-    ~Coords();
+    Free_Move_Coords(TFT_eSPI& tft, Button& button);
+    ~Free_Move_Coords();
+
     void Draw_Static() override;
     void Draw_Update() override;
     void Handle_Button() override;
 
-    struct CoordSprite {
+    struct AngleSprite {
         TFT_eSprite* sprite;
         float value;
         int x;
@@ -37,6 +34,7 @@ private:
     void Draw_UI();
     void Update_UI();
     void UpdateCoords(float x, float y, float z, float rx, float ry, float rz);
+    void MyCobot_Pro_450_Select();
     void Create_Coord_Sprite();
     void Delete_Coord_Sprite();
 
@@ -48,7 +46,6 @@ private:
     TFT_eSprite Rxsprite = TFT_eSprite(&tft);
     TFT_eSprite Rysprite = TFT_eSprite(&tft);
     TFT_eSprite Rzsprite = TFT_eSprite(&tft);
-    TFT_eSprite IP_Coords_sprite = TFT_eSprite(&tft);
 
     float Coords_Data[COORDS_DATA_LEN] = {0.0};
 
@@ -75,11 +72,7 @@ private:
         {"Ry", {270, 100}},//{ "Ry", {240, 90} },
         {"Rz", {270, 135}},//{ "Rz", {240, 115} }
     };
-
-    //ip
-    std::string IP_Coords_UI;
 };
-
 
 
 #endif

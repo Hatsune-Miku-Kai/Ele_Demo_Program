@@ -3,7 +3,8 @@
 
 #include "Serial.hpp"
 #include <vector>
-//class Screen_Base;
+#include "Global_Data.h"
+// class Screen_Base;
 
 #include "Screen_Base.h"
 
@@ -23,6 +24,10 @@ public:
     bool Go_To(Screen_Base::ScreenID target_id);//跳转到指定UI界面
     void RegisterScreen(Screen_Base* screen);//注册页面到内部列表
 
+    
+    void Get_Robot_State_Data(std::vector<uint8_t> &data, std::map<std::string, uint16_t>& robot_states);//从数据中提取机械臂状态
+
+    void Handle_Robot_States_Data(std::map<std::string, uint16_t>& robot_states);//给所有子类提供处理机械臂状态的接口
 
     Screen_Base* GetRegisteredScreenByID(Screen_Base::ScreenID id);//查找已注册页面
 
@@ -32,6 +37,16 @@ public:
     Screen_Base* current_screen = nullptr;//用以表示当前的UI结点
 
     Screen_Base* home_screen = nullptr;//表示对于所有UI而言的Home结点
+
+    uint8_t Select_id = 0;//点动时当前选中的id,可用于传递给校准界面或其他界面
+
+    std::string Select_Name = "";//点动时当前选中的名称,可用于传递给校准界面或其他界面
+
+    unsigned long total_time = 0; // 拖动示教录制总时间
+
+    bool Is_Drag_Tech_Save = false;//拖动示教是否保存了
+
+    
 
     // Screen_Base* error_screen = nullptr;//表示错误界面
 

@@ -55,7 +55,7 @@ void Save::Handle_Button()
     else if (btn == BTN4) // 如果不保存,跳回拖动示教界面
     {
         button.Wait();
-        ui_manager.Go_To(Screen_Base::ScreenID_Drag_Teach);
+        ui_manager.Go_Back();
     }
 }
 
@@ -103,7 +103,6 @@ void Save::Draw_UI()
 void Save::Update_UI()
 {
     uint8_t btn = button.Get_Button_Status(); // 读取当前按键
-    // Serial.println(btn);
     int8_t dir = 0;
     if (btn == BTN1)
         dir = 1; // 下
@@ -128,10 +127,6 @@ void Save::Update_UI()
     tft.setTextColor(TFT_WHITE);
     tft.print("*");
 
-    while (button.Get_Button_Status() != 0)
-    {
-        delay(10);
-    }
 }
 
 void Save::Save_To_RAM()
@@ -139,10 +134,13 @@ void Save::Save_To_RAM()
     tft.setFreeFont(&FreeSansBold9pt7b);
     tft.fillRect(0, 50, tft.width(), 80, TFT_BLACK);
     tft.fillRect(0, 95, tft.width(), 80, TFT_BLACK);
-    tft.setCursor(110, 125);
-    tft.print("Saving...");
-    delay(3000);
-    tft.fillRect(110, 100, tft.width(), 80, TFT_BLACK);
+    tft.setCursor(70, 125);
+    tft.print("Saving Into RAM...");
+
+    Save_Record_450_BackEnd(0);
+
+    vTaskDelay(3000);
+    tft.fillRect(70, 100, tft.width(), 80, TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
     tft.setCursor(110, 125);
     tft.print("Saved!");
@@ -154,10 +152,13 @@ void Save::Save_To_FLASH()
     tft.setFreeFont(&FreeSansBold9pt7b);
     tft.fillRect(0, 50, tft.width(), 80, TFT_BLACK);
     tft.fillRect(0, 95, tft.width(), 80, TFT_BLACK);
-    tft.setCursor(110, 125);
-    tft.print("Saving...");
-    delay(3000);
-    tft.fillRect(110, 100, tft.width(), 80, TFT_BLACK);
+    tft.setCursor(70, 125);
+    tft.print("Saving Into FLASH...");
+
+    Save_Record_450_BackEnd(0);
+
+    vTaskDelay(3000);
+    tft.fillRect(70, 100, tft.width(), 80, TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
     tft.setCursor(110, 125);
     tft.print("Saved!");

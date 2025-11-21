@@ -10,13 +10,11 @@ extern UI_Manager ui_manager;
 
 Program::Program(TFT_eSPI &tft, Button &button) : Screen_Base(tft, button)
 {
-    Serial.println("Program created");
     id = ScreenID::ScreenID_Program;
 }
 
 Program::~Program()
 {
-    Serial.println("Program destroyed");
 }
 
 void Program::Draw_Static()
@@ -131,6 +129,10 @@ void Program::UltraArm_P1_UI()
 
         case 1: // Blockly_Runner
         {
+            Blockly_Runner *blockly_runner = new Blockly_Runner(tft, button);
+            ui_manager.RegisterScreen(blockly_runner); // 将页面放入注册列表
+            button.Wait();
+            ui_manager.Change_UI(blockly_runner, true);
             break;
         }
 
@@ -167,7 +169,6 @@ void Program::UltraArm_P1_UI()
             ui_manager.RegisterScreen(calibration); // 将页面放入注册列表
             button.Wait();
             ui_manager.Change_UI(calibration, true);
-            break;
         }
         }
     }
@@ -187,46 +188,50 @@ void Program::MyCobot_Pro_450_UI()
     {
         switch (selectedIndex)
         {
-        case 0: // DragTeach
-        {
-            Drag_Teach *drag_teach = new Drag_Teach(tft, button);
-            ui_manager.RegisterScreen(drag_teach); // 将页面放入注册列表
-            button.Wait();
-            ui_manager.Change_UI(drag_teach, true);
-            break;
-        }
-
-        case 1: // Blockly_Runner
-        {
-            break;
-        }
-
-        case 2: // Quick_Move
-        {
-            Quick_Move *quick_move = new Quick_Move(tft, button);
-            ui_manager.RegisterScreen(quick_move); // 将页面放入注册列表
-            button.Wait();
-            ui_manager.Change_UI(quick_move, true);
-            break;
-        }
-
-        case 3: // Firmware
-        {
-            Firmware *firmware = new Firmware(tft, button);
-            ui_manager.RegisterScreen(firmware); // 将页面放入注册列表
-            button.Wait();
-            ui_manager.Change_UI(firmware, true);
-            break;
-        }
-
-        case 4: // Calibration
-        {
-            Calibration *calibration = new Calibration(tft, button);
-            ui_manager.RegisterScreen(calibration); // 将页面放入注册列表
-            button.Wait();
-            ui_manager.Change_UI(calibration, true);
-            break;
-        }
+            case 0: // DragTeach
+            {
+                Drag_Teach *drag_teach = new Drag_Teach(tft, button);
+                ui_manager.RegisterScreen(drag_teach); // 将页面放入注册列表
+                button.Wait();
+                ui_manager.Change_UI(drag_teach, true);
+                break;
+            }
+    
+            case 1: // Blockly_Runner
+            {
+                Blockly_Runner *blockly_runner = new Blockly_Runner(tft, button);
+                ui_manager.RegisterScreen(blockly_runner); // 将页面放入注册列表
+                button.Wait();
+                ui_manager.Change_UI(blockly_runner, true);
+                break;
+            }
+    
+            case 2: // Quick_Move
+            {
+                Quick_Move *quick_move = new Quick_Move(tft, button);
+                ui_manager.RegisterScreen(quick_move); // 将页面放入注册列表
+                button.Wait();
+                ui_manager.Change_UI(quick_move, true);
+                break;
+            }
+    
+            case 3: // Firmware
+            {
+                Firmware *firmware = new Firmware(tft, button);
+                ui_manager.RegisterScreen(firmware); // 将页面放入注册列表
+                button.Wait();
+                ui_manager.Change_UI(firmware, true);
+                break;
+            }
+    
+            case 4: // Calibration
+            {
+                Calibration_Joint *calibration_joint = new Calibration_Joint(tft, button);
+                ui_manager.RegisterScreen(calibration_joint); // 将页面放入注册列表
+                button.Wait();
+                ui_manager.Change_UI(calibration_joint, true);
+                break;
+            }
         }
     }
 

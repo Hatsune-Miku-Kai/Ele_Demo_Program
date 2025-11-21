@@ -4,7 +4,8 @@
 
 //logo
 #include "Return_logo.h"
-
+#include "Coord_logo.h"
+#include "Angles_logo.h"
 
 extern UI_Manager ui_manager;
 
@@ -38,161 +39,163 @@ void Free_Move::Draw_Static()
 
 void Free_Move::Draw_Update()
 {
-    Update_UI();  
+#ifdef MyCobot_Pro_450
+    Handle_Data(Global_Data::Data);
+    UpdateAngle_450(Angles_Data[0], Angles_Data[1], Angles_Data[2], Angles_Data[3], Angles_Data[4], Angles_Data[5]);
+#endif
+
+#ifdef UltraArmP1
+    UltraArmP1_UI();
+#endif
 }
 
 
 
 void Free_Move::Handle_Button()
 {
-    uint8_t btn = button.Get_Button_Status();
+#ifdef MyCobot_Pro_450
+    MyCobot_Pro_450_Select();
+#endif
 
-    if(btn == BTN4)
-    {
-        button.Wait();
-        ui_manager.Go_Back();
-    }
 }
 
 void Free_Move::Draw_UI()
 {
+   MyCobot_Pro_450_UI();
+}
+
+
+#ifdef MyCobot_Pro_450
+void Free_Move::MyCobot_Pro_450_Select()
+{
+    uint8_t btn = button.Get_Button_Status();
+    if (btn == BTN3)
+    {
+        if(!(ui_manager.Go_To(ScreenID::ScreenID_Free_Move_Coords)))
+        {
+            button.Wait();
+            Free_Move_Coords *free_move_coords = new Free_Move_Coords(tft, button);
+            ui_manager.RegisterScreen(free_move_coords); // 将页面放入注册列表
+            Delete_Angles_Sprite();
+            ui_manager.Change_UI(free_move_coords, true);
+        }
+
+    }
+
+    else if (btn == BTN4)
+    {
+        button.Wait();
+        Delete_Angles_Sprite();
+        ui_manager.Go_To(ScreenID::ScreenID_Quick_Move);
+    }
+}
+
+void Free_Move::Handle_Data(std::vector<uint8_t> &data)
+{
+    int idx = 0;
+    for (uint8_t i = 0; i < (ANGLES_DATA_LEN * 2); i += 2)
+    {
+        float temp = (float)(data[i] << 8 | data[i + 1]);
+        if (temp > 33000)
+            temp -= 65536;
+        temp /= 100.0f;
+        Angles_Data[idx++] = temp;
+    }
+}
+
+void Free_Move::Create_Angles_Sprite()
+{
+    J1sprite.createSprite(55, 20);
+    J2sprite.createSprite(55, 20);
+    J3sprite.createSprite(55, 20);
+    J4sprite.createSprite(55, 20);
+    J5sprite.createSprite(55, 20);
+    J6sprite.createSprite(55, 20);
+}
+
+void Free_Move::Delete_Angles_Sprite()
+{
+    J1sprite.deleteSprite();
+    J2sprite.deleteSprite();
+    J3sprite.deleteSprite();
+    J4sprite.deleteSprite();
+    J5sprite.deleteSprite();
+    J6sprite.deleteSprite();
+}
+
+
+void Free_Move::MyCobot_Pro_450_UI()
+{
     tft.fillScreen(TFT_BLACK);
 
-    // 标题 UltraArm P1 (12pt)
+    // 标题 MyCobot Pro 450 (12pt)
     tft.setFreeFont(&FreeSansBold12pt7b);
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(10, 30);
+
     tft.print("FreeMove");
 
     // 顶部分割线
     tft.drawLine(0, 40, tft.width(), 40, TFT_WHITE);
 
-    // 左列 Coord
-    tft.setFreeFont(&FreeSansBold9pt7b);
-    tft.setTextColor(TFT_WHITE);
-    tft.setCursor(35, 75);
-    tft.print("Coord");
+    std::map<std::string, std::pair<int, int>>::iterator it;
 
-    // 右列 Angle
-    int rightX = 150;
-    tft.setCursor(rightX + 25, 75);
-    tft.print("Angle");
+    // 左列 Angles
+    for (it = Angles_UI.begin(); it != Angles_UI.end(); it++)
+    {
+        const std::string &name = it->first;
+        std::pair<int, int> pos = it->second;
+        std::pair<int, int> oPos = Angles_Signal[name];
 
+        tft.setFreeFont(&FreeSansBold9pt7b);
+        tft.setTextColor(TFT_WHITE);
+        tft.setCursor(oPos.first, oPos.second);
+        tft.printf("o");
 
-    tft.setFreeFont(&FreeSansBold9pt7b);
-    tft.setTextColor(TFT_WHITE, TFT_BLACK); // 背景黑色，防止重影
-    tft.setCursor(10, 100);
-    tft.printf("X:           mm");
+        tft.setCursor(pos.first, pos.second);
+        tft.printf("%s:", name.c_str());
+    }
 
-    tft.setCursor(10, 125);
-    tft.printf("Y:           mm");
+    tft.fillRect(110, 235, 18, 3, TFT_WHITE);
 
-    tft.setCursor(10, 150);
-    tft.printf("Z:           mm");
-
-    tft.setCursor(10, 175);
-    tft.printf("R:");
-    tft.setCursor(80, 165);
-    tft.printf("o");
-
-
-    tft.setTextColor(TFT_WHITE, TFT_BLACK);
-    tft.setCursor(230, 90);
-    tft.printf("o");
-    tft.setCursor(rightX, 100);
-    tft.printf("J1:                ");
-
-    tft.setCursor(230, 115);
-    tft.printf("o");
-    tft.setCursor(rightX, 125);
-    tft.printf("J2:         ");
-
-    tft.setCursor(230, 140);
-    tft.printf("o");
-    tft.setCursor(rightX, 150);
-    tft.printf("J3:         ");
-
-    tft.setCursor(230, 165);
-    tft.printf("o");
-    tft.setCursor(rightX, 175);
-    tft.printf("J4:         ");
-
-    tft.pushImage(278, 210, 32, 28, return_logo);
+    tft.pushImage(105, 200, 30, 30, angles_logo);
+    tft.pushImage(190, 208, 30, 30, coord_logo);
+    tft.pushImage(275, 210, 32, 28, return_logo);
 
     // 底部分割线
     tft.drawLine(0, 200, tft.width(), 200, TFT_WHITE);
+
+    Create_Angles_Sprite();
 }
 
 
-
-void Free_Move::Update_UI()
+void Free_Move::UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, float j6)
 {
-    static long time = millis();
-    if(millis() - time > 150)
+    int leftX = 40 + 20;   // 这里+号表示修改过,去掉+恢复原来的布局
+    int rightX = 180 + 30; // 这里+号表示修改过,去掉+恢复原来的布局
+    int showY = 62;
+
+    AngleSprite angles[7] = {
+        {&J1sprite, j1, leftX, showY},
+        {&J2sprite, j2, leftX, showY + 35},
+        {&J3sprite, j3, leftX, showY + 70},
+        {&J4sprite, j4, rightX, showY},
+        {&J5sprite, j5, rightX, showY + 35},
+        {&J6sprite, j6, rightX, showY + 70}};
+
+    char buf[6]; // 用于存格式化数字
+
+    for (int i = 0; i < 6; i++)
     {
-        time = millis();
-        // SendArray(Send_Buffer, Recv_Buffer);
+        angles[i].sprite->fillSprite(TFT_BLACK);           // 清空 sprite
+        angles[i].sprite->setFreeFont(&FreeSansBold9pt7b); // 设置字体
+        angles[i].sprite->setTextColor(TFT_WHITE);
+        angles[i].sprite->setTextDatum(TR_DATUM); // 右对齐
 
-        UpdateAngle(J1 , J2, J3, 0);
-        ultraArmP1.rot = (J1) / 180.0 * PI;//1.75;-0.175, 0.060, 1.569
-	    ultraArmP1.low = J2 / 180.0 * PI;// 0.87;
-	    ultraArmP1.high = (J3 + 90) / 180.0 * PI;// 2.44;
-	    ultraArmP1.end = 0;
-	    ultraArmP1.calculateCoords();
-
-        UpdateCoord(ultraArmP1.xmm, ultraArmP1.ymm, ultraArmP1.zmm, ultraArmP1.emm);
+        sprintf(buf, "%5.1f", angles[i].value);                 // 固定宽度 5, 保留 1 位小数
+        angles[i].sprite->drawString(String(buf), 50, 0);       // x 坐标用 sprite 宽度右对齐
+        angles[i].sprite->pushSprite(angles[i].x, angles[i].y); // 推送到屏幕`1
     }
 }
 
-
-void Free_Move::UpdateAngle(float j1, float j2, float j3, float j4)
-{
-        int rightX = 175;
-    int clearX = 180;
-    tft.setFreeFont(&FreeSansBold9pt7b);
-
-    tft.fillRect(clearX, 80, 10, 30, TFT_BLACK);
-    tft.fillRect(clearX, 105, 10, 30, TFT_BLACK);
-    tft.fillRect(clearX, 125, 10, 30, TFT_BLACK);
-
-    tft.setTextColor(TFT_WHITE);
-
-    tft.fillRect(rightX, 80, 50, 25, TFT_BLACK);
-    tft.setCursor(rightX, 100);
-    tft.printf("%6.1f", j1);
-    
-    tft.fillRect(rightX, 105, 50, 25, TFT_BLACK);
-    tft.setCursor(rightX, 125);
-    tft.printf("%6.1f", j2);
-
-    tft.fillRect(rightX, 130, 50, 25, TFT_BLACK);
-    tft.setCursor(rightX, 150);
-    tft.printf("%6.1f", j3);
-
-    tft.fillRect(rightX, 155, 50, 25, TFT_BLACK);
-    tft.setCursor(rightX, 175);
-    tft.printf("%6.1f", j4);
-}
-
-
-void Free_Move::UpdateCoord(float x, float y, float z, float o)
-{
-    tft.setFreeFont(&FreeSansBold9pt7b);
-    tft.setTextColor(TFT_WHITE, TFT_BLACK); // 背景黑色，防止重影
-
-    tft.fillRect(25, 80, 50, 25, TFT_BLACK);
-    tft.setCursor(25, 100);
-    tft.printf("%6.1f", x);
-
-    tft.fillRect(25, 105, 50, 25, TFT_BLACK);
-    tft.setCursor(25, 125);
-    tft.printf("%6.1f", y);
-
-    tft.fillRect(25, 130, 50, 25, TFT_BLACK);
-    tft.setCursor(25, 150);
-    tft.printf("%6.1f", z);
-
-    tft.fillRect(25, 155, 50, 25, TFT_BLACK);
-    tft.setCursor(25, 175);
-    tft.printf("%6.1f", o);
-}
+#endif

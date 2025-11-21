@@ -6,7 +6,7 @@
 
 // 关联界面
 #include "Drag_Teach.h"
-// #include "Blockly_Runner.h"
+#include "Blockly_Runner.h"
 #include "Quick_Move.h"
 #include "Connection.h"
 #include "Firmware.h"
@@ -70,7 +70,6 @@ private:
 #endif
 
     int selectedIndex = 0; // 当前选中
-    // int lastIndex = 0;     // 上一次选中
 
     // 位置
     const int starX = 10;      // 星号起始X,坐标Y沿用lineHeight

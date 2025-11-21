@@ -74,29 +74,31 @@ void Error::Draw_UI()
         tft.setCursor(95, 125);
         tft.setTextColor(TFT_WHITE);
         tft.setFreeFont(&FreeSansBold9pt7b);
-        tft.print("Power Code:");
         tft.printf(" %d", Global_Data::Robot_States["Power Code"]);
-        Get_Robot_State_Data(Global_Data::Data, Global_Data::Robot_States);
     }
 
 }
 
 void Error::Update_UI(std::map<std::string, uint16_t>& Error_Status)
 {
-    Get_Robot_State_Data(Global_Data::Data, Global_Data::Robot_States);
+    vTaskDelay(1000);
+    bool Error_Flag = true;
     for(std::map<std::string, uint16_t>::iterator it = Global_Data::Robot_States.begin(); it != Global_Data::Robot_States.end(); it++)
     {
-        if(it->second == 0 && it->first != "Robot Crashed" && it->first != "Robot Moving")
+        if( it->first != "Power Code" && it->first != "Robot Crashed" && it->first != "Robot Moving" && it->second != 0)
         {
-            ui_manager.Go_Home();
+            Error_Flag = false;//全为0才返回
+            break;
         }
     }
+    if(Error_Flag)
+        ui_manager.Go_Home();
 //角度超限错误
     for(std::map<std::string, uint16_t>::iterator it = Error_Status.begin(); it != Error_Status.end() && count < 9; it++)
     {
         if(it->second != 0 && it->first != "Robot Crashed" && it->first != "Robot Moving")
         {
-            Over_Limit_Error_Msg += it->first + ", ";
+            Over_Limit_Error_Msg += it->second + ", ";
         }
         count++;
     }
@@ -116,7 +118,7 @@ void Error::Update_UI(std::map<std::string, uint16_t>& Error_Status)
     {
         if(it->second != 0)
         {
-            Motor_Error_Msg += it->first + ", ";
+            Motor_Error_Msg += it->second + ", ";
         }
         count++;
     }
@@ -136,7 +138,7 @@ void Error::Update_UI(std::map<std::string, uint16_t>& Error_Status)
     {
         if(it->second != 0)
         {
-            Motor_Error_Msg += it->first + ", ";
+            Motor_Error_Msg += it->second + ", ";
         }
         count++;
     }

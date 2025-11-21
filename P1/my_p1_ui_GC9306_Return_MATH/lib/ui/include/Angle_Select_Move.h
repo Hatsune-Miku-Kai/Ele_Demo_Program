@@ -1,32 +1,51 @@
-#ifndef __FREE_MOVE_H__
-#define __FREE_MOVE_H__
+#ifndef __Angle__Select__Move__H__
+#define __Angle__Select__Move__H__
 
-#include "robotGeometry.hpp"
 #include "Screen_Base.h"
 #include "UI_Manager.h"
 
+
 //关联界面
-#include "Coords.h"
-#include "Free_Move_Coords.h"
+#include "Fine_Tuning_Angles.h"
 
 #define ANGLES_DATA_LEN 6
 
-class Free_Move:public Screen_Base
+class Angle_Select_Move : public Screen_Base
 {
 public:
-    Free_Move(TFT_eSPI& tft, Button& button);
-    ~Free_Move() override;
+    Angle_Select_Move(TFT_eSPI& tft, Button& button);
+    ~Angle_Select_Move();
     void Draw_Static() override;
     void Draw_Update() override;
     void Handle_Button() override;
 
 private:
-    RobotGeometry ultraArmP1;
+        void UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, float j6);
+        void MyCobot_Pro_450_UI();
+        void MyCobot_Pro_450_Select();
+        void Delete_Angles_Sprite();
+        void Create_Angles_Sprite();
 
-    void Draw_UI();
+        void Handle_Data(std::vector<uint8_t>& data);//处理本页面所需数据
 
-    #ifdef MyCobot_Pro_450
-    std::map<std::string, std::pair<int, int>> Angles_UI = {
+        struct AngleSprite {
+            TFT_eSprite* sprite;
+            float value;
+            int x;
+            int y;
+        };
+        const int menuCount = 6;
+        int selectedIndex = 0; // 当前选中
+        const char *menuItems[6] = {
+        "J1",
+        "J2",
+        "J3",
+        "J4",
+        "J5",
+        "J6"};
+        float Angles_Data[ANGLES_DATA_LEN] = {0.0};
+
+        std::map<std::string, std::pair<int, int>> Angles_UI = {
         //左列 Angles
         {"J1", {30, 75}},           // {"J1", {10, 75}},
         {"J2", {30, 110}},        // {"J2", {10, 100}},
@@ -50,24 +69,7 @@ private:
         {"J5", {270, 100}},     // {"J5", {240, 90}},
         {"J6", {270, 135}},     // {"J6", {240, 115}},
     };
-#endif
 
-
-    struct AngleSprite {
-        TFT_eSprite* sprite;
-        float value;
-        int x;
-        int y;
-    };
-
-#ifdef MyCobot_Pro_450
-    void UpdateAngle_450(float j1, float j2, float j3, float j4, float j5, float j6);
-    void MyCobot_Pro_450_UI();
-    void MyCobot_Pro_450_Select();
-    void Delete_Angles_Sprite();
-    void Create_Angles_Sprite();
-
-    void Handle_Data(std::vector<uint8_t>& data);//处理本页面所需数据
 
     TFT_eSprite J1sprite = TFT_eSprite(&tft);
     TFT_eSprite J2sprite = TFT_eSprite(&tft);
@@ -75,16 +77,11 @@ private:
     TFT_eSprite J4sprite = TFT_eSprite(&tft);
     TFT_eSprite J5sprite = TFT_eSprite(&tft);
     TFT_eSprite J6sprite = TFT_eSprite(&tft);
-
-    float Angles_Data[ANGLES_DATA_LEN] = {0.0};
-    
-#endif
-
 };
 
 
 
 
 
-#endif
 
+#endif
